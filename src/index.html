@@ -1,68 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content=" FILL ME IN ">
-    <meta name="author" content=" FILL ME IN ">
-    <title>Cameron Pittman: Portfolio</title>
-  </head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A Neighborhood Map">
+  <meta name="author" content="Wolfgang Stöttinger">
+  <title>Neighborhood Map</title>
 
-  <body>
-    <header>
-      <a href="index.html"><img src="img/profilepic.jpg?cache=true" srcset="img/profilepic.webp?cache=true" alt="Profile Picture" /></a>
-      <p>Cameron Pittman<br><span>Course Developer</span></p>
-    </header>
-
-    <div class="container">
-      <div class="hero">
-        <strong>I love web development!</strong> This is a template for a simple portfolio. I decided to use it to showcase a few Udacity courses I've taken and some teaching work, but you can use it to showcase any kind of project that you want the world to see :) <br> Contact me: me@email.com
+  <style type="text/css">
+    html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+  </style>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"> </script>
+  <!-- script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgG57YiwjH-smycCHYTtClGJzfK833q24"> </script-->
+</head>
+<body>
+  <div id="main" class="content">
+    <header class="navbar">
+      <div class="container">
+        <div class="navbar-header">
+          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <i class="fa fa-bars"></i>
+          </button>
+          <div id="nameDiv"></div>
+        </div>
+        <nav class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#anchorContact">This</a></li>
+            <li><a href="#anchorWork">Is</a></li>
+            <li><a href="#anchorProjects">A</a></li>
+            <li><a href="#anchorEducation">Dummy</a></li>
+            <li><a href="#anchorMap">Menu</a></li>
+          </ul>
+        </nav>
       </div>
-
-      <div class="content">
-        <ul>
-          <li>
-            <img src="img/build_2048-100px.jpg?cache=true" srcset="img/build_2048-100px.webp?cache=true">
-            <a href="project-2048.html">Build Your Own 2048!</a>
-            <p>I made my own version of 2048. How cool is that!?</p>
-          </li>
-
-          <li>
-            <img src="img/performance_optim-100px.jpg?cache=true" srcset="img/performance_optim-100px.webp?cache=true">
-            <a href="project-webperf.html">Website Performance Optimization</a>
-            <p>Hey... this class looks familiar.</p>
-          </li>
-
-          <li>
-            <img src="img/web_dev-100px.png?cache=true" srcset="img/web_dev-100px.webp?cache=true">
-            <a href="project-mobile.html">Mobile Web Development</a>
-            <p>Making mobile apps isn't so hard after all.</p>
-          </li>
-
-          <li>
-            <img src="views/images/pizzeria-100px.jpg?cache=true" srcset="views/images/pizzeria-100px.webp?cache=true">
-            <a href="views/pizza.html">Cam's Pizzeria</a>
-            <p>Who wants a performant pizza?</p>
-          </li>
-        </ul>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="contact-div" data-bind="with:contactInfo">
+            <h2>Contact Infos </h2>
+            <strong>Name: </strong><span data-bind="text:fullName"></span>
+            <strong>Email: </strong><span data-bind="text:email"></span>
+          </div>
+          <h2>Map</h2>
+          <p>Click on existing markers to display up to 5 Panoramio images in the surroundings. Click on any place on the map to place a marker and show images from there. Use the search form to filter markers on the map (search by title or address).</p>
+          <div id="search-div">
+            <form>
+              <p><input data-bind="textInput:searchString"/><input type="submit" data-bind="click:searchReferences" value="search"></input><button data-bind="click:showAll">show all</button><br/><span data-bind="text:info"></span>
+              </p>
+            </form>
+          </div>
+          <div id="map-div" style="height:400px;">
+            <div id="map-canvas"></div> 
+          </div>
+          <div id="results-div" data-bind="foreach:searchResults">
+            <div>
+              <strong data-bind="text:title"></strong>
+              <span data-bind="text:address"></span>
+              <a class="btn btn-sm" data-bind="click:parent.expandResult">+</a>
+              <div class="images" data-bind="visible:isExpanded">
+                <div data-bind="if:showLoading"><span>Loading Images</span></div>
+                <span data-bind="value:errorText"></span>
+                <div data-bind="foreach:images">
+                  <div class="asyncImage">
+                    <a target="_blank" data-bind="attr: {href:photo_url}"><img width="100px" data-bind="attr: {src: photo_file_url}"/></a><br/>
+                    <p><strong>Title: </strong><span data-bind="text:photo_title"></span><br/><strong>Credits: </strong><span data-bind="text:owner_name"></span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <footer>
-      <p>&copy; Web Performance 2014 <span id="crp-stats"></span></p>
-    </footer>
-  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+  <script src="lib/knockout-3.3.0.debug.js"></script>
+  <script src="models/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
 </html>
-
-<!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet"> -->
-<link async href="css/print.css?cache=true" rel="stylesheet" media="print">
-<link async href="css/style.css?cache=true" rel="stylesheet">
-<script async>
-  (function(w,g){w['GoogleAnalyticsObject']=g;
-  w[g]=w[g]||function(){(w[g].q=w[g].q||[]).push(arguments)};w[g].l=1*new Date();})(window,'ga');
-
-  // TODO: replace with your Google Analytics profile ID.
-  ga('create', 'UA-XXXX-Y');
-  ga('send', 'pageview');
-</script>
-<script async src="https://www.google-analytics.com/analytics.js?cache=true"></script>
-<script async src="js/perfmatters.js?cache=true"></script>
