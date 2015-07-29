@@ -214,13 +214,13 @@ gulp.task('serve:dist', ['default'], () => {
 });
 
 // Build production files, the default task
-gulp.task('default', ['clean'], cb => {
-  runSequence(
-    'styles', ['jshint', 'html', 'scripts', 'images', 'fonts', 'copy'],
-    'generate-service-worker',
-    cb
-  );
-});
+  gulp.task('default', ['clean'], cb => {
+    runSequence(
+      'styles', ['jshint', 'html', 'scripts', 'images', 'fonts', 'copy'],
+      'generate-service-worker',
+      cb
+    );
+  });
 
 // Run PageSpeed Insights
 gulp.task('pagespeed', cb => {

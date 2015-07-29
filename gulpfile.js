@@ -1,25 +1,39 @@
-var gulp = require('gulp'),
-  minify = require('gulp-minify-css'),
-  uglify = require('gulp-uglify'),
-  rename = require("gulp-rename");
+var gulp = require('gulp');
+var clean = require('gulp-clean');
+var minify = require('gulp-minify-css');
+var uglify = require('gulp-uglify');
+var rename = require("gulp-rename");
+var imagemin = require("gulp-imagemin");
 
-gulp.task('style', function () {
-  return gulp.src('web/css/*.css')
+gulp.task('images', function () {
+  var imgSrc = './src/img/**/*',
+    imgDst = './dist/img';
+
+  gulp.src(imgSrc)
+    .pipe(changed(imgDst))
+    .pipe(imagemin())
+    .pipe(gulp.dest(imgDst));
+});
+
+gulp.task('css', function () {
+  return gulp.src('./src/css/*.css')
     .pipe(minify())
-    .pipe(gulp.dest('dist/css/'));
+    .pipe(gulp.dest('./dist/css/'));
 });
 
-gulp.task('mainjs', function () {
-  return gulp.src('src/js/*.js')
+gulp.task('js', function () {
+  return gulp.src('./src/js/*.js')
     .pipe(uglify())
-    .pipe(gulp.dest('dist/js/'));
+    .pipe(gulp.dest('./dist/js/'));
 });
 
-gulp.task('clean', cb => del(['.tmp', 'dist/*', '!dist/.git'], {
-  dot: true
-}, cb));
-
+gulp.task('clean', function () {
+  return gulp.src('./dist/**/*', {
+      read: false
+    })
+    .pipe(clean());
+});
 gulp.task('default', ['clean'], function () {
-  gulp.run('style');
-  gulp.run('mainjs');
+  gulp.run('css');
+  gulp.run('js');
 });
