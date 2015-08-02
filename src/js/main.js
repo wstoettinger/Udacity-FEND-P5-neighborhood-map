@@ -1,18 +1,25 @@
+'use strict';
+
 /*
  * this app displays a neighborhood map with basic search functionality, implementin the Google Maps API and other third party APIs for further information.
  */
+var ko = require('knockout');
+ko.mapping = require('knockout.mapping');
+var data = require('./data.js');
+var settings = require('./settings.js');
 
 var geocoder;
 var map;
 var mapInfo;
 var tempMarker = {};
+var mapData = data.mapData;
 
 // the basic ViewModel
-var ViewModel = function () {
+var OldViewModel = function () {
   var self = this;
 
   // the contact info can be found in /models/data.js
-  self.contactInfo = ko.observable(ContactInfo);
+  self.contactInfo = ko.observable(settings.ContactInfo);
 
   // extending the contact info with a computed observable for the full name
   self.contactInfo().fullName = ko.computed(function () {
@@ -37,6 +44,23 @@ var ViewModel = function () {
   tempMarker.showLoading = ko.observable(true);
   tempMarker.isExpanded = ko.observable(false);
   tempMarker.errorText = ko.observable();
+
+  //
+  // new SEARCH
+  //
+  self.searchInput = ko.observable();
+  self.searchOptions = ko.mapping.fromJS(settings.searchOptions);
+  self.searchOptions().getCheckedOptions = function () {
+    var checkedOptions = [];
+    for (var i = 0, len = this.length; i < len; i++) {
+      var item = this[i];
+      if (item.$checked())
+        checkedOptions = checkedOptions.concat(item.searchTypes());
+    }
+    return checkedOptions.filter(function (value, index, self) {
+      return self.indexOf(value) === index;
+    });
+  }
 
   // 
   // search properties
@@ -135,26 +159,156 @@ var ViewModel = function () {
   }
 }
 
-ko.applyBindings(new ViewModel());
+var model = new OldViewModel();
+ko.applyBindings(model);
 
+function loadScript() {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp' +
+    '&signed_in=true&callback=initMap';
+  document.body.appendChild(script);
+}
+
+window.onload = newInit;
+
+function newInit() {
+
+  $("#pac-panel .toggle-settings").click(function () {
+    $("#pac-panel #pac-settings").toggleClass("hidden");
+  });
+}
 // called to initialize the map
 function initMap() {
   // instantiate the geocoder
   geocoder = new google.maps.Geocoder();
 
-  settings.mapOptions.mapTypeControlOptions = {
+  settings.map.mapOptions.mapTypeControlOptions = {
     mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
   };
 
   // create the actual map object
   map = new google.maps.Map(document.getElementById('map-canvas'),
-    settings.mapOptions);
+    settings.map.mapOptions);
 
   //Associate the styled map with the MapTypeId and set it to display.
-  map.mapTypes.set('map_style', new google.maps.StyledMapType(settings.mapStyle, {
+  map.mapTypes.set('map_style', new google.maps.StyledMapType(settings.map.mapStyle, {
     name: "Styled Map"
   }));
   map.setMapTypeId('map_style');
+
+  // add the places panel to the map
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('pac-panel'));
+
+  var places = new google.maps.places.PlacesService(map);
+
+  var autocomplete = new google.maps.places.Autocomplete(document.getElementById('pac-search'));
+  autocomplete.bindTo('bounds', map);
+
+  //autocomplete.setTypes(['cafe']);
+
+  // autocomplete = new google.maps.places.Autocomplete(
+  //   (document.getElementById('pac-autocomplete')), {
+  //     types: ['geocode']
+  //   });
+  google.maps.event.addListener(autocomplete, 'place_changed', function () {
+    // //infowindow.close();
+    // //marker.setVisible(false);
+    var place = autocomplete.getPlace();
+    // if (!place.geometry) {
+    //   window.alert("Autocomplete's returned place contains no geometry");
+    //   return;
+    // }
+
+    // // If the place has a geometry, then present it on a map.
+    // if (place.geometry.viewport) {
+    //   map.fitBounds(place.geometry.viewport);
+    // }
+    // else {
+    //   map.setCenter(place.geometry.location);
+    //   map.setZoom(17); // Why 17? Because it looks good.
+    // }
+    // // marker.setIcon( /** @type {google.maps.Icon} */ ({
+    // //   url: place.icon,
+    // //   size: new google.maps.Size(71, 71),
+    // //   origin: new google.maps.Point(0, 0),
+    // //   anchor: new google.maps.Point(17, 34),
+    // //   scaledSize: new google.maps.Size(35, 35)
+    // // }));
+    // // marker.setPosition(place.geometry.location);
+    // // marker.setVisible(true);
+
+    // var address = '';
+    // if (place.address_components) {
+    //   address = [
+    //     (place.address_components[0] && place.address_components[0].short_name || ''), (place.address_components[1] && place.address_components[1].short_name || ''), (place.address_components[2] && place.address_components[2].short_name || '')
+    //   ].join(' ');
+    // }
+
+    // //infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+    // //infowindow.open(map, marker);
+  });
+
+  /*// link the search box
+  var search = document.getElementById('pac-search');
+  var searchBox = new google.maps.places.SearchBox(search);
+  //var places = new google.maps.places.PlacesService(map);
+
+  var markers = [];
+
+  // Listen for the event fired when the user selects an item from the
+  // pick list. Retrieve the matching places for that item.
+  google.maps.event.addListener(searchBox, 'places_changed', function () {
+    var places = searchBox.getPlaces();
+
+    if (places.length == 0) {
+      return;
+    }
+    for (var i = 0, marker; marker = markers[i]; i++) {
+      marker.setMap(null);
+    }
+
+    // For each place, get the icon, place name, and location.
+    markers = [];
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0, place; place = places[i]; i++) {
+      var image = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+
+      //       icon: {
+      //   path: google.maps.SymbolPath.CIRCLE,
+      //   scale: 10
+      // },
+
+      // Create a marker for each place.
+      var marker = new google.maps.Marker({
+        map: map,
+        icon: image,
+        animation: google.maps.Animation.DROP,
+        title: place.name,
+        position: place.geometry.location
+      });
+
+      markers.push(marker);
+
+      bounds.extend(place.geometry.location);
+    }
+
+    map.fitBounds(bounds);
+    map.setZoom(13);
+  });*/
+
+  // Bias the SearchBox results towards places that are within the bounds of the
+  // current map's viewport.
+  google.maps.event.addListener(map, 'bounds_changed', function () {
+    var bounds = map.getBounds();
+    //searchBox.setBounds(bounds);
+  });
 
   // create an InfoWindow which will be displayed when the user clicks on a marker
   mapInfo = new google.maps.InfoWindow();
@@ -193,8 +347,8 @@ function makeGeocodeCallback(entry, successCallback) {
       });
 
       //style the markers depending on the data set
-      if (entry.type && settings.markerIcons[entry.type]) {
-        entry.marker.setIcon(settings.markerIcons[entry.type]);
+      if (entry.type && settings.map.markerIcons[entry.type]) {
+        entry.marker.setIcon(settings.map.markerIcons[entry.type]);
       }
 
       entry.position = results[0].geometry.location;

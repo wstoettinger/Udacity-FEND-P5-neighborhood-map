@@ -6,12 +6,6 @@
   <meta name="description" content="A Neighborhood Map">
   <meta name="author" content="Wolfgang Stöttinger">
   <title>Neighborhood Map</title>
-
-  <style type="text/css">
-    html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
-  </style>
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"> </script>
-  <!-- script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgG57YiwjH-smycCHYTtClGJzfK833q24"> </script-->
 </head>
 <body>
   <div id="main" class="content">
@@ -37,22 +31,45 @@
     </header>
     <div class="container">
       <div class="row">
-        <div class="col-md-12">
-          <div id="contact-div" data-bind="with:contactInfo">
-            <h2>Contact Infos </h2>
-            <strong>Name: </strong><span data-bind="text:fullName"></span>
-            <strong>Email: </strong><span data-bind="text:email"></span>
+        <div class="col-xs-12">
+          <h3>Eat, Drink &amp; Party in Vienna</h3>
+          <p>This is a collection of my favorite places to go in Vienna.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 col-xs-12">
+          <h3>Map</h3>
+          <!-- the map-div contains all map related ui elements, including all control panel overlays -->
+          <div id="map-div">
+          <!-- the places search panel -->
+            <div id="pac-panel" class="panel">
+              <i class="toggle-settings"></i>
+              <input id="pac-search" class="text" type="text" placeholder="Search" data-bind="searchInput">
+              <!-- the individual search settings are loaded from the app settings -->
+              <div id="pac-settings" class="row checkbox hidden" data-bind="foreach:searchOptions">
+                <label class="checkbox-inline" for="itemId" data-bind="attr: {for:$id}"><input id="itemId" type="checkbox" value="itemValue" data-bind="attr: {id: $id}, checked:$checked"/><span data-bind="text: $label">ItemLabel</span></label>
+              </div>
+            </div>
+            <div id="results-panel" class="panel">
+              <div class="row result">
+                <h3>Title<small>save</small></h3>
+                <span>Address</span><br/>
+                <span>phone</span><br/>
+                <span>internet</span><br/>
+                <span>opening hours</span>
+              </div>
+            </div>
+            <!-- the map canvas contains the actual google map -->
+            <div id="map-canvas"></div>
           </div>
-          <h2>Map</h2>
-          <p>Click on existing markers to display up to 5 Panoramio images in the surroundings. Click on any place on the map to place a marker and show images from there. Use the search form to filter markers on the map (search by title or address).</p>
+        </div>
+        <div class="col-sm-2 col-xs-12">
+          <h3>List</h3>
           <div id="search-div">
             <form>
-              <p><input data-bind="textInput:searchString"/><input type="submit" data-bind="click:searchReferences" value="search"></input><button data-bind="click:showAll">show all</button><br/><span data-bind="text:info"></span>
+              <p><input data-bind="textInput:searchString"/><input type="submit" data-bind="click:searchReferences" value="search" /><button data-bind="click:showAll">show all</button><br/><span data-bind="text:info"></span>
               </p>
             </form>
-          </div>
-          <div id="map-div" style="height:400px;">
-            <div id="map-canvas"></div> 
           </div>
           <div id="results-div" data-bind="foreach:searchResults">
             <div>
@@ -64,7 +81,7 @@
                 <span data-bind="value:errorText"></span>
                 <div data-bind="foreach:images">
                   <div class="asyncImage">
-                    <a target="_blank" data-bind="attr: {href:photo_url}"><img width="100px" data-bind="attr: {src: photo_file_url}"/></a><br/>
+                    <a target="_blank" data-bind="attr: {href:photo_url}"><img width="100" alt="this is an image" data-bind="attr: {src: photo_file_url}"/></a><br/>
                     <p><strong>Title: </strong><span data-bind="text:photo_title"></span><br/><strong>Credits: </strong><span data-bind="text:owner_name"></span></p>
                   </div>
                 </div>
@@ -73,16 +90,24 @@
           </div>
         </div>
       </div>
+      <footer class="container">
+        <div id="contact-div" data-bind="with:contactInfo">
+          <h2>Contact Infos </h2>
+          <strong>Name: </strong><span data-bind="text:fullName"></span>
+          <strong>Email: </strong><span data-bind="text:email"></span>
+        </div>
+      </footer>
     </div>
-  </div>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-  <script src="lib/knockout-3.3.0.debug.js"></script>
-  <script src="models/data.js"></script>
-  <script src="js/main.js"></script>
-</body>
-</html>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"> </script>
+    <!-- script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgG57YiwjH-smycCHYTtClGJzfK833q24"> </script-->
+
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/bundle.js"></script>
+  </body>
+  </html>
