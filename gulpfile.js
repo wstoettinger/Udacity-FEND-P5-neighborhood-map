@@ -20,24 +20,24 @@ gulp.task('scripts', function () {
     .pipe(source('bundle.js'))
     //.pipe(buffer())
     //.pipe(uglify())
-    .pipe(gulp.dest('./dist/js/'));
+    .pipe(gulp.dest('./web/js/'));
 });
 
 gulp.task('css', function () {
   return gulp.src('./src/**/*.css')
     .pipe(minify())
-    .pipe(gulp.dest('./dist/'));
+    .pipe(gulp.dest('./web/'));
 });
 
 // copy the index files
 gulp.task('index', function () {
   return gulp.src('./src/index.*')
-    .pipe(gulp.dest('./dist/'));
+    .pipe(gulp.dest('./web/'));
 });
 
 gulp.task('img', function () {
   var imgSrc = './src/img/**/*',
-    imgDst = './dist/img';
+    imgDst = './web/img';
 
   gulp.src(imgSrc)
     //.pipe(changed(imgDst))
