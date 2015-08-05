@@ -1,10 +1,13 @@
 ## Neighborhood Map Project
+===========================
+
+This code was downloaded from https://github.com/wstoettinger/frontend-nanodegree-meighborhood-map
 
 (c) 2015 Wolfgang Stöttinger
 
 download the source and open the index.html (the index.php is just a wrapper so heroku detects which build pack to use).
 
-this app is also hosted at https://safe-ocean-5919.herokuapp.com/
+This app is also hosted at https://safe-ocean-5919.herokuapp.com/
 
 
 ## howto:
