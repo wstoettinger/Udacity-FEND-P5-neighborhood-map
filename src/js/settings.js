@@ -9,37 +9,43 @@ var settings = {
     email: "wolfgang.stoettinger@gmail.com"
   },
 
-  searchOptions: [{
-    $id: "pac-all",
-    $type: "ckeckbox",
-    $checked: true,
-    $label: "All",
-    searchTypes: ["cafe", "bar", "restaurant", "night_club"]
-  }, {
-    $id: "pac-cafes",
-    $type: "ckeckbox",
-    $checked: true,
-    $label: "Cafés",
-    searchTypes: ["cafe"]
-  }, {
-    $id: "pac-bars",
-    $type: "ckeckbox",
-    $checked: true,
-    $label: "Bars",
-    searchTypes: ["bar"]
-  }, {
-    $id: "pac-restaurants",
-    $type: "ckeckbox",
-    $checked: true,
-    $label: "Restaurants",
-    searchTypes: ["restaurant"]
-  }, {
-    $id: "pac-clubs",
-    $type: "ckeckbox",
-    $checked: true,
-    $label: "Clubs",
-    searchTypes: ["night_club"]
-  }],
+  searchOptions: {
+    typeOptions: [{
+      $id: "pac-all",
+      $type: "ckeckbox",
+      $checked: true,
+      $label: "All",
+      searchTypes: []
+    }, {
+      $id: "pac-cafes",
+      $type: "ckeckbox",
+      $checked: true,
+      $label: "Cafés",
+      searchTypes: ["cafe"]
+    }, {
+      $id: "pac-bars",
+      $type: "ckeckbox",
+      $checked: true,
+      $label: "Bars",
+      searchTypes: ["bar"]
+    }, {
+      $id: "pac-restaurants",
+      $type: "ckeckbox",
+      $checked: true,
+      $label: "Restaurants",
+      searchTypes: ["restaurant"]
+    }, {
+      $id: "pac-clubs",
+      $type: "ckeckbox",
+      $checked: true,
+      $label: "Clubs",
+      searchTypes: ["night_club"]
+    }],
+    types: [],
+    maxPriceLevel: 4,
+    minPriceLevel: 0,
+    openNow: false
+  },
 
   // the settings for the google maps api.
   map: {

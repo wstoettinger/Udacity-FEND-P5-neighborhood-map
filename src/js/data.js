@@ -20,6 +20,84 @@ var data = {
     type: "public"
   }],
 
+  searchResults: [{
+    "geometry": {
+      "bounds": {
+        "Ia": {
+          "G": 48.2146941,
+          "j": 48.214757
+        },
+        "Ca": {
+          "j": 16.353895800000032,
+          "G": 16.35389829999997
+        }
+      },
+      "viewport": {
+        "Ia": {
+          "G": 48.2133765697085,
+          "j": 48.2160745302915
+        },
+        "Ca": {
+          "j": 16.35254806970852,
+          "G": 16.355246030291482
+        }
+      }
+    },
+    "icon": "http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png",
+    "id": "33d0030850a614a8f19281d047c90e27f950a19b",
+    "name": "Edison",
+    "opening_hours": {
+      "open_now": true,
+      "weekday_text": []
+    },
+    "photos": [{
+      "height": 1365,
+      "html_attributions": ["<a href=\"https://www.google.com/maps/views/profile/113500132060505623166\">Edison</a>"],
+      "width": 2048
+    }],
+    "place_id": "ChIJPRjOjr8HbUcRmMZloblE6OU",
+    "rating": 4.2,
+    "reference": "CmRaAAAAeHwWdfdurBce8H42kdDODCrkrrzwV8aeAFTxEVQlRgGUwE42OS5asJ235QB69NV-DLa7PqAMoUC3hgNCTSqtT4CFH7ol--ey1kKx8jqQnAt0BUBYzVcQ3C-Ve4nemLlnEhAIsq_-mlXSCQg6-n5tvN3KGhRoUIgyzYluJ_AW_c6Xsg7MzdKmCw",
+    "scope": "GOOGLE",
+    "types": ["restaurant", "bar", "food", "point_of_interest", "establishment"],
+    "vicinity": "Alser Straße 9, Wien",
+    "html_attributions": [],
+    "address_components": [{
+      "long_name": "9",
+      "short_name": "9",
+      "types": ["street_number"]
+    }, {
+      "long_name": "Alser Straße",
+      "short_name": "Alser Str.",
+      "types": ["route"]
+    }, {
+      "long_name": "Alservorstadt",
+      "short_name": "Alservorstadt",
+      "types": ["neighborhood", "political"]
+    }, {
+      "long_name": "Josefstadt",
+      "short_name": "Josefstadt",
+      "types": ["sublocality_level_1", "sublocality", "political"]
+    }, {
+      "long_name": "Wien",
+      "short_name": "Wien",
+      "types": ["locality", "political"]
+    }, {
+      "long_name": "Wien",
+      "short_name": "Wien",
+      "types": ["administrative_area_level_1", "political"]
+    }, {
+      "long_name": "Österreich",
+      "short_name": "AT",
+      "types": ["country", "political"]
+    }, {
+      "long_name": "1080",
+      "short_name": "1080",
+      "types": ["postal_code"]
+    }],
+    "formatted_address": "Edison, Alser Straße 9, 1080 Wien, Österreich"
+  }],
+
   locations: [{
     title: "Cafe Ansari",
     place: {

@@ -8,12 +8,12 @@ body,
 }
 
 #map-div {
-  height: 400px;
+  height: 800px;
 }
 
 /* control panels which are overlays on the map */
 #map-div .panel {
-  margin: 16px 0 0 8px;
+  margin: 8px 0 0 8px;
   font-family: Roboto;
   font-size: 15px;
   font-weight: 300;
@@ -30,8 +30,7 @@ body,
 #map-div .panel div.row {
   margin: 0;
   padding: 7px 0 6px 15px;
-  height: 36px;
-  border-top: 1px solid rgba(0, 0, 0, .1);
+  min-height: 36px;
 }
 
 #map-div input {
@@ -83,6 +82,16 @@ body,
 
 #pac-panel {
   width: 400px;
+  z-index: 100 !important;
+}
+
+#pac-settings {
+  height: 36px;
+  border-top: 1px solid rgba(0, 0, 0, .1);
+}
+
+#results-panel {
+  width: 300px;
 }
 
 /* legacy CSS */
@@ -100,4 +109,23 @@ body,
 
 .pac-container {
   z-index: 10000 !important;
+}
+
+.iw-row {
+  height: 18px;
+}
+
+.iw-header {
+  margin-right: 2px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.iw-icon {
+  text-align: right;
+}
+
+.markerIcon,
+.placeIcon {
+  height: 24px;
 }

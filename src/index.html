@@ -9,26 +9,6 @@
 </head>
 <body>
   <div id="main" class="content">
-    <header class="navbar">
-      <div class="container">
-        <div class="navbar-header">
-          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <i class="fa fa-bars"></i>
-          </button>
-          <div id="nameDiv"></div>
-        </div>
-        <nav class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="#anchorContact">This</a></li>
-            <li><a href="#anchorWork">Is</a></li>
-            <li><a href="#anchorProjects">A</a></li>
-            <li><a href="#anchorEducation">Dummy</a></li>
-            <li><a href="#anchorMap">Menu</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
     <div class="container">
       <div class="row">
         <div class="col-xs-12">
@@ -37,33 +17,70 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-10 col-xs-12">
+        <div class="col-sm-12 col-xs-12">
           <h3>Map</h3>
           <!-- the map-div contains all map related ui elements, including all control panel overlays -->
           <div id="map-div">
-          <!-- the places search panel -->
+            <!-- the places search panel -->
             <div id="pac-panel" class="panel">
               <i class="toggle-settings"></i>
               <input id="pac-search" class="text" type="text" placeholder="Search" data-bind="searchInput">
               <!-- the individual search settings are loaded from the app settings -->
-              <div id="pac-settings" class="row checkbox hidden" data-bind="foreach:searchOptions">
+              <div id="pac-settings" class="row checkbox hidden" data-bind="foreach:searchOptions.typeOptions">
                 <label class="checkbox-inline" for="itemId" data-bind="attr: {for:$id}"><input id="itemId" type="checkbox" value="itemValue" data-bind="attr: {id: $id}, checked:$checked"/><span data-bind="text: $label">ItemLabel</span></label>
               </div>
             </div>
+            <!-- panel with search results shown on the left side -->
             <div id="results-panel" class="panel">
-              <div class="row result">
-                <h3>Title<small>save</small></h3>
-                <span>Address</span><br/>
-                <span>phone</span><br/>
-                <span>internet</span><br/>
-                <span>opening hours</span>
+              <div id="results-filter" class="row">
+                <span>types</span> <span>rating</span> <span>open now</span> <span>more</span>
+              </div>
+              <div id="results" data-bind="foreach:searchResults">
+                <div class="row result">
+                  <h5><span data-bind="if:markerIcon"><img class="markerIcon" alt="marker icon" data-bind="attr: {src:markerIcon}" /></span>
+                  <span data-bind="text:name">Title</span>
+                  <span data-bind="if:icon"><img class="placeIcon" alt="place icon" data-bind="attr: {src:icon}" /></span></h5>
+                  <span data-bind="text:vicinity">Address</span><br/>
+                  <span>phone</span><br/>
+                  <span>internet</span><br/>
+                  <span>opening hours</span><br/>
+                  <!-- ko if: rating -->
+                  <span>rating: <span data-bind="text:rating"></span></span>
+                  <!-- /ko -->
+                </div>
               </div>
             </div>
             <!-- the map canvas contains the actual google map -->
             <div id="map-canvas"></div>
+            <!-- the content template of the infoWindow -->
+            <div id="info-content" data-bind="if:selectedPlace">
+              <table data-bind="with:selectedPlace">
+                <tr class="iw-row">
+                  <td class="iw-icon"><img class="placeIcon" alt="place icon" data-bind="attr: {src:icon}" /></td>
+                  <td><b><a data-bind="attr: {href:url}, text:name"></a></b></td>
+                </tr>
+                <tr class="iw-row" data-bind="if:vicinity">
+                  <td class="iw-header">Address:</td>
+                  <td data-bind="text:vicinity"></td>
+                </tr>
+                <tr class="iw-row" data-bind="if:formatted_phone_number">
+                  <td class="iw-header">Telephone:</td>
+                  <td data-bind="text:formatted_phone_number"></td>
+                </tr>
+                <tr class="iw-row" data-bind="if:rating">
+                  <td class="iw-header">Rating:</td>
+                  <td data-bind="text:rating"></td>
+                </tr>
+                <tr class="iw-row" data-bind="if:website">
+                  <td class="iw-header">Website:</td>
+                  <td data-bind="text:website"></td>
+                </tr>
+              </table>
+            </div>
+
           </div>
         </div>
-        <div class="col-sm-2 col-xs-12">
+     <!--    <div class="col-sm-2 col-xs-12">
           <h3>List</h3>
           <div id="search-div">
             <form>
@@ -88,24 +105,21 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
-      <footer class="container">
+<!--       <footer class="container">
         <div id="contact-div" data-bind="with:contactInfo">
           <h2>Contact Infos </h2>
           <strong>Name: </strong><span data-bind="text:fullName"></span>
           <strong>Email: </strong><span data-bind="text:email"></span>
         </div>
-      </footer>
+      </footer> -->
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"> </script>
-    <!-- script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgG57YiwjH-smycCHYTtClGJzfK833q24"> </script-->
 
     <link rel="stylesheet" href="css/style.css">
     <script src="js/bundle.js"></script>
