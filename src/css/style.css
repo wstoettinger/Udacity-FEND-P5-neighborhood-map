@@ -31,6 +31,34 @@ body,
   margin: 0;
   padding: 7px 0 6px 15px;
   min-height: 36px;
+  max-width: inherit;
+  transition: background-color 200ms cubic-bezier(0.52, 0, 0.48, 1);
+}
+
+/* the scrollable results panel */
+#map-div #results {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.row.result:hover {
+  background-color: #F5F5F5;
+}
+
+.result-selected,
+.result-selected:hover {
+  background-color: #F0F0F0 !important;
+}
+
+hr {
+  background: #e6e6e6;
+  border: none;
+  height: 1px;
+  margin: 0px 0px 0px 10px;
+}
+
+hr.full-line {
+  margin: 0px;
 }
 
 #map-div input {
@@ -80,18 +108,18 @@ body,
   display: none;
 }
 
-#pac-panel {
+#search-panel {
   width: 400px;
   z-index: 100 !important;
+}
+
+#results-panel {
+  width: 300px;
 }
 
 #pac-settings {
   height: 36px;
   border-top: 1px solid rgba(0, 0, 0, .1);
-}
-
-#results-panel {
-  width: 300px;
 }
 
 /* legacy CSS */
@@ -128,4 +156,38 @@ body,
 .markerIcon,
 .placeIcon {
   height: 24px;
+}
+
+/* 
+ * JFK Scrollbar Styling
+ */
+.jfk-scrollbar::-webkit-scrollbar-button {
+  height: 0;
+  width: 0;
+}
+
+.jfk-scrollbar::-webkit-scrollbar-track {
+  background-clip: padding-box;
+  border: solid transparent;
+  border-width: 0 1px 0 6px;
+}
+
+.jfk-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.jfk-scrollbar::-webkit-scrollbar {
+  height: 16px;
+  overflow: visible;
+  width: 16px;
+}
+
+.jfk-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, .2);
+  background-clip: padding-box;
+  border: solid transparent;
+  border-width: 0 1px 0 6px;
+  min-height: 28px;
+  padding: 100px 0 0;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1), inset 0 -1px 0 rgba(0, 0, 0, .07);
 }

@@ -22,7 +22,7 @@
           <!-- the map-div contains all map related ui elements, including all control panel overlays -->
           <div id="map-div">
             <!-- the places search panel -->
-            <div id="pac-panel" class="panel">
+            <div id="search-panel" class="panel">
               <i class="toggle-settings"></i>
               <input id="pac-search" class="text" type="text" placeholder="Search" data-bind="searchInput">
               <!-- the individual search settings are loaded from the app settings -->
@@ -35,11 +35,17 @@
               <div id="results-filter" class="row">
                 <span>types</span> <span>rating</span> <span>open now</span> <span>more</span>
               </div>
-              <div id="results" data-bind="foreach:searchResults">
-                <div class="row result">
-                  <h5><span data-bind="if:markerIcon"><img class="markerIcon" alt="marker icon" data-bind="attr: {src:markerIcon}" /></span>
-                  <span data-bind="text:name">Title</span>
-                  <span data-bind="if:icon"><img class="placeIcon" alt="place icon" data-bind="attr: {src:icon}" /></span></h5>
+              <hr role="presentation" class="horizontal-line full-line" />
+              <div id="results" class="jfk-scrollbar" data-bind="foreach:searchResults">
+                <!-- ko ifnot: first -->
+                <hr role="presentation" class="horizontal-line" >
+                <!-- /ko -->
+                <div class="row result" data-bind="click:onClick, css:{ 'result-selected': selected }">
+                  <h5>
+                    <span data-bind="if:markerIcon"><img class="markerIcon" alt="marker icon" data-bind="attr: {src:markerIcon}" /></span>
+                    <span data-bind="text:name">Title</span>
+                    <span data-bind="if:icon"><img class="placeIcon" alt="place icon" data-bind="attr: {src:icon}" /></span>
+                  </h5>
                   <span data-bind="text:vicinity">Address</span><br/>
                   <span>phone</span><br/>
                   <span>internet</span><br/>
@@ -54,29 +60,36 @@
             <div id="map-canvas"></div>
             <!-- the content template of the infoWindow -->
             <div id="info-content" data-bind="if:selectedPlace">
-              <table data-bind="with:selectedPlace">
-                <tr class="iw-row">
-                  <td class="iw-icon"><img class="placeIcon" alt="place icon" data-bind="attr: {src:icon}" /></td>
-                  <td><b><a data-bind="attr: {href:url}, text:name"></a></b></td>
-                </tr>
-                <tr class="iw-row" data-bind="if:vicinity">
-                  <td class="iw-header">Address:</td>
-                  <td data-bind="text:vicinity"></td>
-                </tr>
-                <tr class="iw-row" data-bind="if:formatted_phone_number">
-                  <td class="iw-header">Telephone:</td>
-                  <td data-bind="text:formatted_phone_number"></td>
-                </tr>
-                <tr class="iw-row" data-bind="if:rating">
-                  <td class="iw-header">Rating:</td>
-                  <td data-bind="text:rating"></td>
-                </tr>
-                <tr class="iw-row" data-bind="if:website">
-                  <td class="iw-header">Website:</td>
-                  <td data-bind="text:website"></td>
-                </tr>
-              </table>
+              <div class="gm-iw gm-sm" data-bind="with:selectedPlace">
+                <div class="gm-title" data-bind="text:name"></div>
+                <div class="gm-basicinfo">
+                  <div class="gm-addr" data-bind="text:vicinity"></div>
+                  <div class="gm-website" data-bind="if:website"><a target="_blank" data-bind="attr: {href:website}, text:websiteText"></a></div>
+                  <div class="gm-phone" data-bind="text:formatted_phone_number"></div>
+                </div>
+                <div class="gm-photos" style="display: none;">
+                  <span class="gm-wsv" jsdisplay="!photoImg" jsvalues=".onclick:svClickFn" jstcache="6">
+                    <img jsvalues=".src:svImg" width="204" height="50" jstcache="11"><label class="gm-sv-label" jstcache="0">Street View</label>
+                  </span>
+                  <span class="gm-sv" jsdisplay="photoImg" jsvalues=".onclick:svClickFn" jstcache="7">
+                    <img jsvalues=".src:svImg" width="100" height="50" jstcache="11"><label class="gm-sv-label" jstcache="0">Street View</label>
+                  </span>
+                  <span class="gm-ph" jsdisplay="photoImg" jstcache="8"><a jsvalues=".href:i.result.url;" target="_blank" jstcache="12">
+                    <img jsvalues=".src:photoImg" width="100" height="50" jstcache="14"><label class="gm-ph-label" jstcache="0">Fotos</label></a>
+                  </span>
+                </div>
+                <div class="gm-rev" >
+                  <span data-bind="if:rating">
+                    <span class="gm-numeric-rev" data-bind="text:rating"></span>
+                    <div class="gm-stars-b">
+                      <div class="gm-stars-f" data-bind="style: { width: getStarWidth } "></div>
+                    </div>
+                  </span>
+                  <span data-bind="if:url"><a target="_blank" data-bind="attr: {href:url}">see more</a></span>
+                </div>
+              </div>
             </div>
+
 
           </div>
         </div>
@@ -107,7 +120,7 @@
           </div>
         </div> -->
       </div>
-<!--       <footer class="container">
+  <!--       <footer class="container">
         <div id="contact-div" data-bind="with:contactInfo">
           <h2>Contact Infos </h2>
           <strong>Name: </strong><span data-bind="text:fullName"></span>
@@ -115,13 +128,16 @@
         </div>
       </footer> -->
     </div>
+  </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/bundle.js"></script>
-  </body>
-  </html>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/bundle.js"></script>
+</body>
+</html>
+
+

@@ -6,7 +6,8 @@ var data = require('./data.js');
 var ko = require('knockout');
 ko.mapping = require('knockout.mapping');
 
-var model, map, geocoder, places, autocomplete, infoWindow, marker, markers = [];
+var model, map, geocoder, places, autocomplete, infoWindow, marker, markers = [],
+  selectedPlace;
 
 function ViewModel() {
   model = this;
@@ -82,7 +83,7 @@ ViewModel.prototype.initialize = function () {
   map.setMapTypeId('map_style');
 
   // push the panels to the map object
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('pac-panel'));
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('search-panel'));
   map.controls[google.maps.ControlPosition.LEFT_TOP].push(document.getElementById('results-panel'));
 
   // associate the autocomplete instance to the search box
@@ -122,20 +123,11 @@ ViewModel.prototype.initialize = function () {
 // called when the search box fires the 'place_changed' event
 //
 function placeChanged() {
-  clearResults();
   clearMarkers();
 
   var place = autocomplete.getPlace();
   if (place.geometry) {
-
-    // If the place has a geometry, then present it on a map.
-    if (place.geometry.viewport)
-      map.fitBounds(place.geometry.viewport);
-    else
-      map.setCenter(place.geometry.location);
-
-    if (hasType(place, "establishment"))
-      setMarker(place);
+    setPlace(place);
   }
   else if (place.name) {
     performSearch(place.name);
@@ -144,7 +136,6 @@ function placeChanged() {
 
 function performSearch(text) {
   // clear results
-  clearResults();
   clearMarkers();
 
   // get the searchoptions from the viewmodel and adjust them as needed
@@ -161,47 +152,149 @@ function performSearch(text) {
       return;
 
     var len = results.length;
+    var places = [];
 
-    if (len == 1) { // set the single marker
-      if (hasType(place, "establishment"))
-        setMarker(results[0]);
-    }
+    if (len == 1)
+      setPlace(place); // set the single marker
     else { // Create a marker for each result
+      model.searchResults.removeAll();
+
       for (var i = 0, j = 0; i < len; i++) {
         var place = results[i];
-        if (hasType(place, "establishment")) {
-          addMarker(place, j);
-          j++;
-        }
-      }
-    }
 
+        // only add establishments to the search results
+        if (addPlace(place, j))
+          j++;
+      }
+
+      fitToMarkers();
+    }
   });
 }
 
-function clearResults() {
+function setPlace(place) {
+  // If the place has a geometry, then present it on a map.
+  if (place.geometry.viewport)
+    map.fitBounds(place.geometry.viewport);
+  else
+    map.setCenter(place.geometry.location);
+
   model.searchResults.removeAll();
+  addPlace(place);
+}
+
+function addPlace(place, i) {
+  if (hasType(place, "establishment")) {
+
+    var koPlace = ko.mapping.fromJS(place);
+    koPlace.jsPlace = place; // link back to the original JS object
+    koPlace.index = i;
+    koPlace.first = ko.computed(function () {
+      return !(this.index > 0);
+    }, koPlace);
+    koPlace.onClick = function () {
+      selectPlace(this);
+    }
+
+    extendPlaceDetails(koPlace);
+    model.searchResults.push(koPlace);
+
+    if (i >= 0)
+      addMarker(koPlace, i);
+    else
+      setMarker(koPlace);
+
+    return true;
+  }
+  return false;
+}
+
+function selectPlace(koPlace) {
+  if (selectedPlace)
+    selectedPlace.selected(false);
+
+  if (koPlace) {
+    koPlace.selected(true);
+    selectedPlace = koPlace;
+    model.selectedPlace(koPlace);
+    if (koPlace.marker)
+      infoWindow.open(map, koPlace.marker);
+  }
+  else {
+    infoWindow.close();
+    //model.selectedPlace(null);
+  }
+}
+
+// adds additional information from the google places api AFTER the knockout data binding to a knockout observable
+// this needs to be done after the place is added to the model, because the api call happens asynchronously
+function extendPlaceDetails(koPlace) {
+
+  if (!koPlace.selected)
+    koPlace.selected = ko.observable(false);
+  if (!koPlace.formatted_phone_number)
+    koPlace.formatted_phone_number = ko.observable();
+  if (!koPlace.rating)
+    koPlace.rating = ko.observable();
+
+  if (!koPlace.url)
+    koPlace.url = ko.observable();
+
+  if (!koPlace.website)
+    koPlace.website = ko.observable();
+  if (!koPlace.websiteText)
+    koPlace.websiteText = ko.observable();
+  if (!koPlace.markerIcon)
+    koPlace.markerIcon = ko.observable();
+
+  if (!koPlace.getStarWidth)
+    koPlace.getStarWidth = ko.computed(function () {
+      if (this.rating() > 0)
+        return (65 * this.rating() / 5) + 'px';
+      return '57.2px';
+    }, koPlace);
+
+  if (!koPlace.extended || !koPlace.extended()) {
+
+    places.getDetails({
+        placeId: koPlace.place_id()
+      },
+      function (placeDetails, status) {
+
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+
+          var details = ko.mapping.fromJS(placeDetails);
+          $.extend(koPlace.jsPlace, placeDetails);
+          $.extend(koPlace, details); // TODO: check if this is working and check which details are fetched and which props get overwritten.
+          koPlace.extended = ko.observable(true);
+
+          // build a short url for display of the website.
+          var matches = koPlace.website().replace(/^https?:\/\//i, '').replace(/^www\./i, '').match(/.+?\//);
+          if (matches && matches[0]) {
+            koPlace.websiteText(matches[0].replace(/\/$/, ''));
+          }
+
+        }
+      });
+  }
 }
 
 // adds the place to the model and sets the marker
-function setMarker(place) {
+function setMarker(koPlace) {
 
-  if (place) {
+  if (koPlace) {
+    // koPlace.markerIcon = ko.observable(); // TODO: set the porper icon here
 
-    if (!place.rating)
-      place.rating = null;
-    place.markerIcon = null; // TODO: set the porper icon here
-    model.searchResults.push(ko.mapping.fromJS(place));
-
-    marker.placeResult = place;
-    marker.setTitle(place.name);
-    marker.setPosition(place.geometry.location);
+    marker.koPlace = koPlace;
+    koPlace.marker = marker;
+    marker.setTitle(koPlace.name());
+    marker.setPosition(koPlace.jsPlace.geometry.location);
     marker.setVisible(true);
 
-    //showInfoWindow(marker);
+    markers[0] = marker;
   }
   else {
-    showInfoWindow(null);
+    selectPlace(null);
     marker.setVisible(false);
   }
 }
@@ -209,7 +302,7 @@ function setMarker(place) {
 //var MARKER_PATH = 'https://maps.gstatic.com/intl/en_us/mapfiles/marker_green';
 var MARKER_PATH = 'https://maps.gstatic.com/intl/en_us/mapfiles/marker';
 
-function addMarker(place, i) {
+function addMarker(koPlace, i) {
 
   // use letter-coded icons
   var markerLetter = String.fromCharCode('A'.charCodeAt(0) + i);
@@ -217,19 +310,16 @@ function addMarker(place, i) {
 
   // create a marker
   var m = new google.maps.Marker({
-    title: place.name,
-    position: place.geometry.location,
+    title: koPlace.name(),
+    position: koPlace.jsPlace.geometry.location,
     animation: google.maps.Animation.DROP,
     icon: markerIcon
   });
-  m.placeResult = place;
+  m.koPlace = koPlace;
+  koPlace.marker = m;
   markers[i] = m;
 
-  if (!place.rating)
-    place.rating = null;
-  place.markerIcon = markerIcon;
-  // add the result to the model
-  model.searchResults.push(ko.mapping.fromJS(place));
+  koPlace.markerIcon(markerIcon);
 
   google.maps.event.addListener(m, 'click', markerClicked);
   setTimeout(dropMarker(i), i * 100);
@@ -254,28 +344,7 @@ function dropMarker(i) {
 }
 
 function markerClicked() {
-  var marker = this;
-  showInfoWindow(marker);
-}
-
-function showInfoWindow(marker) {
-  if (marker) {
-    places.getDetails({
-        placeId: marker.placeResult.place_id
-      },
-      function (place, status) {
-        var p = marker.placeResult;
-        if (status == google.maps.places.PlacesServiceStatus.OK)
-          p = place;
-
-        model.selectedPlace(ko.mapping.fromJS(p));
-        infoWindow.open(map, marker);
-      });
-  }
-  else {
-    model.selectedPlace(null);
-    infoWindow.close();
-  }
+  selectPlace(this.koPlace);
 }
 
 function hasType(place, type) {
@@ -317,13 +386,31 @@ function makeGeocodeCallback(place, callback) {
   };
 }
 
+function fitToMarkers() {
+  var bounds = new google.maps.LatLngBounds();
+  for (var i = 0, len = markers.length; i < len; i++) {
+    var marker = markers[i];
+
+    bounds.extend(marker.getPosition());
+    var koPlace = marker.koPlace;
+    if (koPlace && koPlace.jsPlace.geometry.viewport)
+      bounds.extend(koPlace.jsPlace.geometry.viewport);
+  }
+
+  map.fitBounds(bounds);
+
+  // don't zoom too close when few markers are present
+  if (map.getZoom() > 17)
+    map.setZoom(17);
+}
+
 function mapBoundsChanged() {
   var bounds = map.getBounds();
 
 };
 
 function mapClicked(e) {
-  infoWindow.close();
+  //selectPlace(null);
 };
 
 module.exports = new ViewModel();
