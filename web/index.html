@@ -9,150 +9,124 @@
 </head>
 <body>
   <div id="main" class="content">
-    <div>
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12">
-          <h3>Eat, Drink &amp; Party in Vienna</h3>
-          <p>This is a collection of my favorite places to go in Vienna.</p>
+    <!-- the map-div contains all map related ui elements, including all control panel overlays -->
+    <div id="map-div">
+      <!-- the places search panel -->
+      <div id="search-panel" class="panel">
+        <!-- the individual search settings are loaded from the app settings -->
+        <div id="pac-settings" class="row checkbox hidden">
+          <span><span data-bind="foreach:searchOptions.typeOptions">
+            <label class="checkbox-inline" for="itemId" data-bind="attr: {for:$id}"><input id="itemId" type="checkbox" value="itemValue" data-bind="attr: {id: $id}, checked:$checked"/><span data-bind="text: $label">ItemLabel</span></label>
+          </span></span><i class="arrows"></i>
         </div>
+        <div class ="row">
+          <div>Recommended Places:</div>
+          <div id="pac-recommendations">
+            <a id="rec-all">all</a> | <a id="rec-cafes">cafes</a> | <a id="rec-bars">bars</a> | <a id="rec-restaurants">restaurants</a> | <a id="rec-clubs">clubs</a>
+          </div>
+        </div>
+        <hr role="presentation" class="horizontal-line full-line" />
+        <i class="arrows"></i>
+        <input id="pac-search" class="text" type="text" placeholder="Search" data-bind="searchInput">
       </div>
-      </div>
-      <div>  <!-- class="row"> -->
-        <div> <!-- class="col-sm-12 col-xs-12"> -->
-          <!-- the map-div contains all map related ui elements, including all control panel overlays -->
-          <div id="map-div">
-            <!-- the places search panel -->
-            <div id="search-panel" class="panel">
-              <!-- the individual search settings are loaded from the app settings -->
-              <div id="pac-settings" class="row checkbox hidden">
-                <span><span data-bind="foreach:searchOptions.typeOptions">
-                <label class="checkbox-inline" for="itemId" data-bind="attr: {for:$id}"><input id="itemId" type="checkbox" value="itemValue" data-bind="attr: {id: $id}, checked:$checked"/><span data-bind="text: $label">ItemLabel</span></label>
-                </span></span><i class="arrows"></i>
-              </div>
-              <div id="pac-recommendations" class="row">
-                Recommended: <a id="rec-all">all</a> | <a id="rec-cafes">cafes</a> | <a id="rec-bars">bars</a> | <a id="rec-restaurants">restaurants</a> | <a id="rec-clubs">clubs</a>
-              </div>
-              <hr role="presentation" class="horizontal-line full-line" />
-              <i class="arrows"></i>
-              <input id="pac-search" class="text" type="text" placeholder="Search" data-bind="searchInput">
-            </div>
-            <!-- panel with search results shown on the left side -->
-            <div id="results-panel" class="panel hidden">
-              <div id="results-filter" class="row">
-                <span>types</span> <span>rating</span> <span>open now</span> <span>more</span>
-              </div>
-              <hr role="presentation" class="horizontal-line full-line" />
-              <div id="results" class="jfk-scrollbar" data-bind="foreach:searchResults">
-                <!-- ko ifnot: first -->
-                <hr role="presentation" class="horizontal-line" >
+      <!-- panel with search results shown on the left side -->
+      <div id="results-panel" class="panel hidden">
+        <div id="results-filter" class="row">
+          <!-- <span>types</span> <span>rating</span> <span>open now</span> <span>more</span> -->
+          <i id="clear-results" class="close"></i>
+        </div>
+        <hr role="presentation" class="horizontal-line full-line" />
+        <div id="results" class="jfk-scrollbar" data-bind="foreach:searchResults">
+          <!-- ko ifnot: first -->
+          <hr role="presentation" class="horizontal-line" >
+          <!-- /ko -->
+          <div class="row result gm-style-iw" data-bind="click:onClick, css:{ 'result-selected': selected }">
+            <div class="gm-iw gm-sm">
+              <span>
+                <span data-bind="text:indexDisplay"></span>&nbsp;
+                <span class="gm-title" data-bind="text:name"></span>
+                <span data-bind="if:markerIcon"><img class="markerIcon" alt="marker icon" data-bind="attr: {src:markerIcon}" /></span>
+                <!-- ko if: review -->
+                <span class="iw-recommended">recommended</span>
                 <!-- /ko -->
-                <div class="row result gm-style-iw" data-bind="click:onClick, css:{ 'result-selected': selected }">
-                  <div class="gm-iw gm-sm">
-                    <span>
-                      <span data-bind="text:indexDisplay"></span>&nbsp;
-                      <span class="gm-title" data-bind="text:name"></span>
-                      <span data-bind="if:markerIcon"><img class="markerIcon" alt="marker icon" data-bind="attr: {src:markerIcon}" /></span>
-                      <!-- ko if: false -->
-                      <span data-bind="if:icon"><img class="placeIcon" alt="place icon" data-bind="attr: {src:icon}" /></span>
-                      <!-- /ko -->
-                    </span>
-                    <div class="gm-basicinfo">
-                      <div class="gm-addr" data-bind="text:vicinity"></div>
-                      <div class="gm-website" data-bind="if:website"><a target="_blank" data-bind="attr: {href:website}, text:websiteText"></a></div>
-                      <div class="gm-phone" data-bind="text:formatted_phone_number"></div>
-                    </div>
-                    <div class="gm-rev" >
-                      <span data-bind="if:rating">
-                        <span class="gm-numeric-rev" data-bind="text:rating"></span>
-                        <div class="gm-stars-b">
-                          <div class="gm-stars-f" data-bind="style: { width: getStarWidth } "></div>
-                        </div>
-                      </span>
-                      <span data-bind="if:url"><a target="_blank" data-bind="attr: {href:url}">see more</a></span>
-                    </div>
-                  </div>
-                </div>
+                <!-- ko if: false -->
+                <span data-bind="if:icon"><img class="placeIcon" alt="place icon" data-bind="attr: {src:icon}" /></span>
+                <!-- /ko -->
+              </span>
+              <div class="gm-basicinfo">
+                <div class="gm-addr" data-bind="text:vicinity"></div>
+                <div class="gm-website" data-bind="if:website"><a target="_blank" data-bind="attr: {href:website}, text:websiteText"></a></div>
+                <div class="gm-phone" data-bind="text:formatted_phone_number"></div>
               </div>
-              <hr role="presentation" class="horizontal-line full-line" />
-              <div id="results-pagination" class="row">
-                <span>displaying <span id="results-count" data-bind="text:resultsCount"></span> results</span>
-                <a id="results-more" class="hidden">more</a>
-              </div>
-            </div>
-            <!-- the map canvas contains the actual google map -->
-            <div id="map-canvas"></div>
-            <!-- a wrapper for the  infoWindow content -->
-            <div id="info-window-container" style="display:none;">
-              <!-- the content template of the infoWindow content -->
-              <div id="info-content" data-bind="if:selectedPlace">
-                <div class="gm-iw gm-sm" data-bind="with:selectedPlace">
-                  <span data-bind="text:indexDisplay"></span>&nbsp;
-                  <span class="gm-title" data-bind="text:name"></span>
-                  <div class="gm-basicinfo">
-                    <div class="gm-addr" data-bind="text:vicinity"></div>
-                    <div class="gm-website" data-bind="if:website"><a target="_blank" data-bind="attr: {href:website}, text:websiteText"></a></div>
-                    <div class="gm-phone" data-bind="text:formatted_phone_number"></div>
+              <div class="gm-rev" >
+                <span data-bind="if:rating">
+                  <span class="gm-numeric-rev" data-bind="text:rating"></span>
+                  <div class="gm-stars-b">
+                    <div class="gm-stars-f" data-bind="style: { width: getStarWidth } "></div>
                   </div>
-                  <div class="gm-photos" style="display: none;">
-                    <span class="gm-wsv" jsdisplay="!photoImg" jsvalues=".onclick:svClickFn" jstcache="6">
-                      <img jsvalues=".src:svImg" width="204" height="50" jstcache="11"><label class="gm-sv-label" jstcache="0">Street View</label>
-                    </span>
-                    <span class="gm-sv" jsdisplay="photoImg" jsvalues=".onclick:svClickFn" jstcache="7">
-                      <img jsvalues=".src:svImg" width="100" height="50" jstcache="11"><label class="gm-sv-label" jstcache="0">Street View</label>
-                    </span>
-                    <span class="gm-ph" jsdisplay="photoImg" jstcache="8"><a jsvalues=".href:i.result.url;" target="_blank" jstcache="12">
-                      <img jsvalues=".src:photoImg" width="100" height="50" jstcache="14"><label class="gm-ph-label" jstcache="0">Fotos</label></a>
-                    </span>
-                  </div>
-                  <div class="gm-rev" >
-                    <span data-bind="if:rating">
-                      <span class="gm-numeric-rev" data-bind="text:rating"></span>
-                      <div class="gm-stars-b">
-                        <div class="gm-stars-f" data-bind="style: { width: getStarWidth } "></div>
-                      </div>
-                    </span>
-                    <span data-bind="if:url"><a target="_blank" data-bind="attr: {href:url}">see more</a></span>
-                  </div>
-                </div>
+                </span>
+                <span data-bind="if:url"><a target="_blank" data-bind="attr: {href:url}">Google Places</a></span>
               </div>
             </div>
           </div>
         </div>
-     <!--    <div class="col-sm-2 col-xs-12">
-          <h3>List</h3>
-          <div id="search-div">
-            <form>
-              <p><input data-bind="textInput:searchString"/><input type="submit" data-bind="click:searchReferences" value="search" /><button data-bind="click:showAll">show all</button><br/><span data-bind="text:info"></span>
-              </p>
-            </form>
-          </div>
-          <div id="results-div" data-bind="foreach:searchResults">
-            <div>
-              <strong data-bind="text:title"></strong>
-              <span data-bind="text:address"></span>
-              <a class="btn btn-sm" data-bind="click:parent.expandResult">+</a>
-              <div class="images" data-bind="visible:isExpanded">
-                <div data-bind="if:showLoading"><span>Loading Images</span></div>
-                <span data-bind="value:errorText"></span>
-                <div data-bind="foreach:images">
-                  <div class="asyncImage">
-                    <a target="_blank" data-bind="attr: {href:photo_url}"><img width="100" alt="this is an image" data-bind="attr: {src: photo_file_url}"/></a><br/>
-                    <p><strong>Title: </strong><span data-bind="text:photo_title"></span><br/><strong>Credits: </strong><span data-bind="text:owner_name"></span></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> -->
+        <hr role="presentation" class="horizontal-line full-line" />
+        <div id="results-pagination" class="row">
+          <span>displaying <span id="results-count" data-bind="text:resultsCount"></span> results</span>
+          <a id="results-more" class="hidden">more</a>
+        </div>
       </div>
-  <!--       <footer class="container">
-        <div id="contact-div" data-bind="with:contactInfo">
-          <h2>Contact Infos </h2>
-          <strong>Name: </strong><span data-bind="text:fullName"></span>
-          <strong>Email: </strong><span data-bind="text:email"></span>
+      <!-- the map canvas contains the actual google map -->
+      <div id="map-canvas"></div>
+      <!-- a wrapper for the  infoWindow content -->
+      <div id="info-window-container" style="display:none;">
+        <!-- the content template of the infoWindow content -->
+        <div id="info-content" data-bind="if:selectedPlace">
+          <div class="gm-iw gm-sm" data-bind="with:selectedPlace">
+            <span data-bind="text:indexDisplay"></span>&nbsp;
+            <span class="gm-title" data-bind="text:name"></span>
+            <div class="gm-basicinfo">
+              <div class="gm-addr" data-bind="text:vicinity"></div>
+              <div class="gm-website" data-bind="if:website"><a target="_blank" data-bind="attr: {href:website}, text:websiteText"></a></div>
+              <div class="gm-phone" data-bind="text:formatted_phone_number"></div>
+            </div>
+            <div class="gm-photos" style="display: none;">
+              <span class="gm-wsv" jsdisplay="!photoImg" jsvalues=".onclick:svClickFn" jstcache="6">
+                <img jsvalues=".src:svImg" width="204" height="50" jstcache="11"><label class="gm-sv-label" jstcache="0">Street View</label>
+              </span>
+              <span class="gm-sv" jsdisplay="photoImg" jsvalues=".onclick:svClickFn" jstcache="7">
+                <img jsvalues=".src:svImg" width="100" height="50" jstcache="11"><label class="gm-sv-label" jstcache="0">Street View</label>
+              </span>
+              <span class="gm-ph" jsdisplay="photoImg" jstcache="8"><a jsvalues=".href:i.result.url;" target="_blank" jstcache="12">
+                <img jsvalues=".src:photoImg" width="100" height="50" jstcache="14"><label class="gm-ph-label" jstcache="0">Fotos</label></a>
+              </span>
+            </div>
+            <div class="gm-rec" data-bind="if:review">
+              <div><a id="review-more">show recommendation</a></div>
+              <span id="review-details" class="hidden" data-bind="with:review">
+                <div class="gm-title">Recommendation: <a id="review-close">close</a></div>
+                <div data-bind="if:description"><span data-bind="text:description"></span></div>
+                <div class="gm-title">Rating:</div>
+                <div data-bind="if:price">price category: <span data-bind="text:price"></span></div>
+                <div data-bind="if:value4money">value for money: <span data-bind="text:value4money"></span></div>
+                <div data-bind="if:atmosphere">atmosphere: <span data-bind="text:atmosphere"></span></div>
+                <div data-bind="if:friendlyness">friendlyness: <span data-bind="text:friendlyness"></span></div>
+                <div data-bind="if:speed">speed: <span data-bind="text:speed"></span></div>
+                <div data-bind="if:tags">tags: <span data-bind="foreach:tags"><span class="gm-tag" data-bind="text:$data"></span> </span></div>
+              </span>
+            </div>
+            <div class="gm-rev" >
+              <span data-bind="if:rating">
+                <span class="gm-numeric-rev" data-bind="text:rating"></span>
+                <div class="gm-stars-b">
+                  <div class="gm-stars-f" data-bind="style: { width: getStarWidth } "></div>
+                </div>
+              </span>
+              <span data-bind="if:url"><a target="_blank" data-bind="attr: {href:url}">Google Places</a></span>
+            </div>
+          </div>
         </div>
-      </footer> -->
+      </div>
     </div>
   </div>
 

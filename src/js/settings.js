@@ -2,13 +2,6 @@
 
 var settings = {
 
-  // The Model for my personal contact information
-  ContactInfo: {
-    first_name: "Wolfgang",
-    last_name: "Stöttinger",
-    email: "wolfgang.stoettinger@gmail.com"
-  },
-
   searchOptions: {
     typeOptions: [{
       $id: "pac-all",

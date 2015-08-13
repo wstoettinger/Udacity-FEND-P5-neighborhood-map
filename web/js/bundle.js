@@ -3,354 +3,30 @@
 
 var data = {
 
-  // the data for all markers to show on the map
-  mapData: [{
-    title: "Here",
-    address: "Zimmermanngasse 11, 1090 Wien",
-    region: "Austria",
-    type: "private"
-  }, {
-    title: "There",
-    address: "Margaretenstraße 52, 1040 Wien",
-    region: "Austria",
-    type: "private"
-  }, {
-    title: "Vienna University of Business and Economics",
-    address: "Welthandelsplatz 1, 1020 Wien",
-    region: "Austria",
-    type: "public"
-  }],
-
-  searchResults: [{
-    "geometry": {
-      "bounds": {
-        "Ia": {
-          "G": 48.2146941,
-          "j": 48.214757
-        },
-        "Ca": {
-          "j": 16.353895800000032,
-          "G": 16.35389829999997
-        }
-      },
-      "viewport": {
-        "Ia": {
-          "G": 48.2133765697085,
-          "j": 48.2160745302915
-        },
-        "Ca": {
-          "j": 16.35254806970852,
-          "G": 16.355246030291482
-        }
-      }
-    },
-    "icon": "http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png",
-    "id": "33d0030850a614a8f19281d047c90e27f950a19b",
-    "name": "Edison",
-    "opening_hours": {
-      "open_now": true,
-      "weekday_text": []
-    },
-    "photos": [{
-      "height": 1365,
-      "html_attributions": ["<a href=\"https://www.google.com/maps/views/profile/113500132060505623166\">Edison</a>"],
-      "width": 2048
-    }],
-    "place_id": "ChIJPRjOjr8HbUcRmMZloblE6OU",
-    "rating": 4.2,
-    "reference": "CmRaAAAAeHwWdfdurBce8H42kdDODCrkrrzwV8aeAFTxEVQlRgGUwE42OS5asJ235QB69NV-DLa7PqAMoUC3hgNCTSqtT4CFH7ol--ey1kKx8jqQnAt0BUBYzVcQ3C-Ve4nemLlnEhAIsq_-mlXSCQg6-n5tvN3KGhRoUIgyzYluJ_AW_c6Xsg7MzdKmCw",
-    "scope": "GOOGLE",
-    "types": ["restaurant", "bar", "food", "point_of_interest", "establishment"],
-    "vicinity": "Alser Straße 9, Wien",
-    "html_attributions": [],
-    "address_components": [{
-      "long_name": "9",
-      "short_name": "9",
-      "types": ["street_number"]
-    }, {
-      "long_name": "Alser Straße",
-      "short_name": "Alser Str.",
-      "types": ["route"]
-    }, {
-      "long_name": "Alservorstadt",
-      "short_name": "Alservorstadt",
-      "types": ["neighborhood", "political"]
-    }, {
-      "long_name": "Josefstadt",
-      "short_name": "Josefstadt",
-      "types": ["sublocality_level_1", "sublocality", "political"]
-    }, {
-      "long_name": "Wien",
-      "short_name": "Wien",
-      "types": ["locality", "political"]
-    }, {
-      "long_name": "Wien",
-      "short_name": "Wien",
-      "types": ["administrative_area_level_1", "political"]
-    }, {
-      "long_name": "Österreich",
-      "short_name": "AT",
-      "types": ["country", "political"]
-    }, {
-      "long_name": "1080",
-      "short_name": "1080",
-      "types": ["postal_code"]
-    }],
-    "formatted_address": "Edison, Alser Straße 9, 1080 Wien, Österreich"
-  }],
-
-  bla: [{
-    "address_components": [{
-      "long_name": "15",
-      "short_name": "15",
-      "types": ["street_number"]
-    }, {
-      "long_name": "Praterstraße",
-      "short_name": "Praterstraße",
-      "types": ["route"]
-    }, {
-      "long_name": "Leopoldstadt",
-      "short_name": "Leopoldstadt",
-      "types": ["sublocality_level_1", "sublocality", "political"]
-    }, {
-      "long_name": "Wien",
-      "short_name": "Wien",
-      "types": ["locality", "political"]
-    }, {
-      "long_name": "Wien",
-      "short_name": "Wien",
-      "types": ["administrative_area_level_1", "political"]
-    }, {
-      "long_name": "Österreich",
-      "short_name": "AT",
-      "types": ["country", "political"]
-    }, {
-      "long_name": "1020",
-      "short_name": "1020",
-      "types": ["postal_code"]
-    }],
-    "adr_address": "<span class=\"street-address\">Praterstraße 15</span>, <span class=\"postal-code\">1020</span> <span class=\"locality\">Wien</span>, <span class=\"country-name\">Österreich</span>",
-    "formatted_address": "Praterstraße 15, 1020 Wien, Österreich",
-    "formatted_phone_number": "01 2765102",
-    "geometry": {
-      "location": {
-        "G": 48.213362,
-        "K": 16.381574
-      }
-    },
-    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png",
-    "id": "01d2fbb73620d5621c082fbbee3077f30348ec9f",
-    "international_phone_number": "+43 1 2765102",
-    "name": "Café Ansari",
-    "opening_hours": {
-      "open_now": true,
-      "periods": [{
-        "close": {
-          "day": 0,
-          "time": "1500",
-          "hours": 15,
-          "minutes": 0,
-          "nextDate": 1439730000000
-        },
-        "open": {
-          "day": 0,
-          "time": "0900",
-          "hours": 9,
-          "minutes": 0,
-          "nextDate": 1439708400000
-        }
-      }, {
-        "close": {
-          "day": 1,
-          "time": "2330",
-          "hours": 23,
-          "minutes": 30,
-          "nextDate": 1439847000000
-        },
-        "open": {
-          "day": 1,
-          "time": "0800",
-          "hours": 8,
-          "minutes": 0,
-          "nextDate": 1439791200000
-        }
-      }, {
-        "close": {
-          "day": 2,
-          "time": "2330",
-          "hours": 23,
-          "minutes": 30,
-          "nextDate": 1439933400000
-        },
-        "open": {
-          "day": 2,
-          "time": "0800",
-          "hours": 8,
-          "minutes": 0,
-          "nextDate": 1439877600000
-        }
-      }, {
-        "close": {
-          "day": 3,
-          "time": "2330",
-          "hours": 23,
-          "minutes": 30,
-          "nextDate": 1440019800000
-        },
-        "open": {
-          "day": 3,
-          "time": "0800",
-          "hours": 8,
-          "minutes": 0,
-          "nextDate": 1439964000000
-        }
-      }, {
-        "close": {
-          "day": 4,
-          "time": "2330",
-          "hours": 23,
-          "minutes": 30,
-          "nextDate": 1439501400000
-        },
-        "open": {
-          "day": 4,
-          "time": "0800",
-          "hours": 8,
-          "minutes": 0,
-          "nextDate": 1440050400000
-        }
-      }, {
-        "close": {
-          "day": 5,
-          "time": "2330",
-          "hours": 23,
-          "minutes": 30,
-          "nextDate": 1439587800000
-        },
-        "open": {
-          "day": 5,
-          "time": "0800",
-          "hours": 8,
-          "minutes": 0,
-          "nextDate": 1439532000000
-        }
-      }, {
-        "close": {
-          "day": 6,
-          "time": "2330",
-          "hours": 23,
-          "minutes": 30,
-          "nextDate": 1439674200000
-        },
-        "open": {
-          "day": 6,
-          "time": "0800",
-          "hours": 8,
-          "minutes": 0,
-          "nextDate": 1439618400000
-        }
-      }],
-      "weekday_text": ["Montag: 08:00–23:30", "Dienstag: 08:00–23:30", "Mittwoch: 08:00–23:30", "Donnerstag: 08:00–23:30", "Freitag: 08:00–23:30", "Samstag: 08:00–23:30", "Sonntag: 09:00–15:00"]
-    },
-    "photos": [{
-      "height": 1363,
-      "html_attributions": ["<a href=\"https://www.google.com/maps/views/profile/110921168312797197410\">Café Ansari</a>"],
-      "width": 2048
-    }, {
-      "height": 1365,
-      "html_attributions": ["<a href=\"https://www.google.com/maps/views/profile/110921168312797197410\">Café Ansari</a>"],
-      "width": 2048
-    }, {
-      "height": 1363,
-      "html_attributions": ["<a href=\"https://www.google.com/maps/views/profile/110921168312797197410\">Café Ansari</a>"],
-      "width": 2048
-    }, {
-      "height": 1365,
-      "html_attributions": ["<a href=\"https://www.google.com/maps/views/profile/110921168312797197410\">Café Ansari</a>"],
-      "width": 2048
-    }],
-    "place_id": "ChIJ0wH4BwoHbUcROe9cFXZUiXI",
-    "rating": 4.5,
-    "reference": "CmRfAAAA8OrG-b55y4A46Y1pZelylZjwdlJYRqXRVnN_lazr9y4aIoBVoMYfh8CrjTlzr92UkO0oYIt4COa8CYtCt5cIrdn8qaRB8ImajKG-QbwHLLSnJKOsRZhDwf1Tt1azLW8hEhDTLlUpbNw0bcfrDqiMLoIgGhQAXkJ5aw0sxAIn2KR4BxXEe8rQ1Q",
-    "reviews": [{
-      "aspects": [{
-        "rating": 2,
-        "type": "overall"
-      }],
-      "author_name": "Helmut Hackl",
-      "author_url": "https://plus.google.com/101314728207236476698",
-      "language": "de",
-      "rating": 4,
-      "text": "Das Cafe Ansari ist ein schickes Lokal, wo es nicht nur Kaffee und angenehme Musik gibt, sondern auch diverse Frühstücks-Variationen. Wenn das Wetter passt, dann lässt es sich gemütlich im Freien entspannen.\n\nIch habe mich heute fürs georgisches Frühstück entschieden. Mit Adscharisches Khatschapuri (Germteigfladen mit Käsefüllung und Spiegelei), Kirsch-Tomaten-Salat mit rotem Basilikum-Dressing und frischen Kräutern (ca. 20 Minuten Wartezeit einkalkulieren). War köstlich und sättigend, aber mit fast 10 Euro doch überteuert.\n\nEin paar Worte zum Kaffee. Der kommt von Fürth Kaffee Wien. Als Cappuccino (3,30 Euro) hat er mir gemundet, als Espresso (2,30 Euro) war er mir zu bitter.",
-      "time": 1427976157
-    }, {
-      "aspects": [{
-        "rating": 2,
-        "type": "overall"
-      }],
-      "author_name": "Da. K.",
-      "author_url": "https://plus.google.com/114912467055292472157",
-      "language": "de",
-      "rating": 4,
-      "text": "Exzellent...",
-      "time": 1432375712
-    }, {
-      "aspects": [{
-        "rating": 3,
-        "type": "overall"
-      }],
-      "author_name": "Charlotte Str",
-      "author_url": "https://plus.google.com/103200486362923583644",
-      "language": "de",
-      "rating": 5,
-      "text": "Eines meiner Lieblingslokale. Supet essen zu jeder Tageszeit inkl Frühstück.  Sehr nettes Ambiente.  Service ist immer nett aber unterschiedlich fit.",
-      "time": 1399485740
-    }, {
-      "aspects": [{
-        "rating": 3,
-        "type": "overall"
-      }],
-      "author_name": "Christian JIRoUT",
-      "author_url": "https://plus.google.com/114095226351762510125",
-      "language": "de",
-      "rating": 5,
-      "text": "Teuer aber jeden Cent wert. Qualität an Service und Speisen kostet halt ! Im Gastgarten kommt Urlaubsfeeling mitten in Wien auf. KRITIK: Keine!",
-      "time": 1403180728
-    }, {
-      "aspects": [{
-        "rating": 1,
-        "type": "overall"
-      }],
-      "author_name": "Sebastian Haiss",
-      "author_url": "https://plus.google.com/106298049879722757420",
-      "language": "de",
-      "rating": 3,
-      "text": "Guter Mix aus georgischer und libanesischer Küche + stilvolle Einrichtung. Bester Hummus den ich bis jetzt gegessen habe. Top!",
-      "time": 1352031608
-    }],
-    "scope": "GOOGLE",
-    "types": ["restaurant", "food", "point_of_interest", "establishment"],
-    "url": "https://plus.google.com/110921168312797197410/about?hl=de",
-    "user_ratings_total": 22,
-    "utc_offset": 120,
-    "vicinity": "Praterstraße 15, Wien",
-    "website": "http://www.cafeansari.at/",
-    "html_attributions": []
-  }],
-
+  // the saved recommendations:
   recommendations: {
     "ChIJ0wH4BwoHbUcROe9cFXZUiXI": {
       place_id: "ChIJ0wH4BwoHbUcROe9cFXZUiXI",
-      description: "Das Cafe Ansari in der Praterstraße ist der perfekte Ort für ein ausgedehntes Frühstück, Mittagessen, Abendessen oder einfach so zum Kaffee. Die Inneneinrichtung ist modern und gemütlich zugleich und kleine Eyecatcher, wie etwa die handgemachten Kacheln, oder auch die täglich frischen Blumen auf den Tischen, verleihen dem Lokal das gewisse Etwas. Was das Kulinarische betrifft, so findet man im Ansari neben interessanten Frühstücksvariationen, wie etwa das russische oder georgische Frühstück, auch köstliche Antipasti, originelle Vorspeisen und eine umfangreiche Hauptspeisenkarte. Und spätestens nach der Créme Brulée oder dem lauwarmen Schokokuchen plant man bereits den nächsten Lokalbesuch.",
-      types: ["cafe", "bar", "restaurant"],
-      tags: ["breakfast", "dinner", "lunch", "1020"],
-      visited: true,
+      name: "Café Ansari",
+      vicinity: "Praterstraße 15, Wien",
+      website: "http://www.cafeansari.at/",
+      formatted_phone_number: "01 2765102",
+      geometry: {
+        location: {
+          G: 48.213362,
+          K: 16.381574
+        }
+      },
+      types: ["cafe", "bar", "restaurant", "establishment"],
       review: {
+        description: "Das Cafe Ansari in der Praterstraße ist der perfekte Ort für ein ausgedehntes Frühstück, Mittagessen, Abendessen oder einfach so zum Kaffee. Die Inneneinrichtung ist modern und gemütlich zugleich und kleine Eyecatcher, wie etwa die handgemachten Kacheln, oder auch die täglich frischen Blumen auf den Tischen, verleihen dem Lokal das gewisse Etwas. Was das Kulinarische betrifft, so findet man im Ansari neben interessanten Frühstücksvariationen, wie etwa das russische oder georgische Frühstück, auch köstliche Antipasti, originelle Vorspeisen und eine umfangreiche Hauptspeisenkarte. Und spätestens nach der Créme Brulée oder dem lauwarmen Schokokuchen plant man bereits den nächsten Lokalbesuch.",
+        tags: ["breakfast", "dinner", "lunch"],
         price: "€€",
         value4money: 3,
         atmosphere: 4,
         friendlyness: 4,
         speed: 4,
+        visited: true,
       }
     }
   }
@@ -394,13 +70,6 @@ window.onload = loadScript;
 'use strict';
 
 var settings = {
-
-  // The Model for my personal contact information
-  ContactInfo: {
-    first_name: "Wolfgang",
-    last_name: "Stöttinger",
-    email: "wolfgang.stoettinger@gmail.com"
-  },
 
   searchOptions: {
     typeOptions: [{
@@ -492,27 +161,21 @@ module.exports = settings;
 },{}],4:[function(require,module,exports){
 'use strict';
 
+// load necessary files using browserify
 var settings = require('./settings.js');
 var data = require('./data.js');
-//var $ = require('jquery');
 var ko = require('knockout');
 ko.mapping = require('knockout.mapping');
 
 var model, map, geocoder, places, autocomplete, infoWindow, marker, markers = [],
-  selectedPlace;
+  selectedPlace, recommended = {},
+  width;
 
+//
+// constructor of the viewmodel, called before the google maps api is loaded asynchronously
+//
 function ViewModel() {
   model = this;
-
-  //
-  // Contact Info
-  //
-  model.contactInfo = ko.observable(settings.ContactInfo);
-
-  // extending the contact info with a computed observable for the full name
-  model.contactInfo().fullName = ko.computed(function () {
-    return this.first_name + " " + this.last_name;
-  }, model.contactInfo());
 
   //
   // Search
@@ -521,6 +184,7 @@ function ViewModel() {
   model.searchOptions = ko.mapping.fromJS(settings.searchOptions);
 
   // extender which recalculates the types array each time a checkbox changes.
+  // note: this is currently not used
   ko.extenders.updateTypes = function (target, searchOptions) {
 
     target.subscribe(function (newValue) {
@@ -540,6 +204,8 @@ function ViewModel() {
     return target;
   };
 
+  // load the place types for search options
+  // note: this is currently not used
   var o = model.searchOptions.typeOptions();
   for (var i = 0, len = o.length; i < len; i++) {
     // everytime a checkbox gets checkt, the updateTypes extender is called
@@ -551,7 +217,7 @@ function ViewModel() {
   //
   // Search results
   //
-  model.searchResults = ko.observableArray(); // ko.mapping.fromJS(data.searchResults);
+  model.searchResults = ko.observableArray();
   model.selectedPlace = ko.observable();
 
   model.resultsCount = ko.computed(function () {
@@ -559,11 +225,25 @@ function ViewModel() {
   }, model);
 
   //
-  // Saved Locations
-  // TODO
+  // Recommended Places
+  //
+  recommended.all = getRecommendations();
+  recommended.cafes = getRecommendations('cafe');
+  recommended.bars = getRecommendations('bar');
+  recommended.restaurants = getRecommendations('restaurant');
+  recommended.clubs = getRecommendations('club');
 };
 
+//
+// called after the google maps api is fully loaded
+//
 ViewModel.prototype.initialize = function () {
+
+  // save the window width for responsive behaviour
+  width = $(window).width();
+  $(window).resize(function () {
+    width = $(window).width();
+  });
 
   // extend the loaded settings for the map_style
   settings.map.mapOptions.mapTypeControlOptions = {
@@ -580,7 +260,11 @@ ViewModel.prototype.initialize = function () {
 
   // push the panels to the map object
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('search-panel'));
-  map.controls[google.maps.ControlPosition.LEFT_TOP].push(document.getElementById('results-panel'));
+
+  if (width <= 480) // responsive results panel:
+    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('results-panel'));
+  else
+    map.controls[google.maps.ControlPosition.LEFT_TOP].push(document.getElementById('results-panel'));
 
   // associate the autocomplete instance to the search box
   autocomplete = new google.maps.places.Autocomplete(document.getElementById('pac-search'));
@@ -600,12 +284,23 @@ ViewModel.prototype.initialize = function () {
     map: map,
     animation: google.maps.Animation.DROP
   });
+
   // add event listeners
   google.maps.event.addListener(autocomplete, 'place_changed', placeChanged);
-  google.maps.event.addListener(map, 'bounds_changed', mapBoundsChanged);
   google.maps.event.addListener(map, 'click', mapClicked);
   google.maps.event.addListener(marker, 'click', markerClicked);
-  google.maps.event.addListener(infoWindow, 'closeclick', closeInfoWindow);
+  google.maps.event.addListener(infoWindow, 'closeclick', infoWindowClosed);
+
+  $('#rec-all').click(recommended.all, recClicked);
+  $('#rec-cafes').click(recommended.cafes, recClicked);
+  $('#rec-bars').click(recommended.bars, recClicked);
+  $('#rec-restaurants').click(recommended.restaurants, recClicked);
+  $('#rec-clubs').click(recommended.clubs, recClicked);
+
+  $('#clear-results').click(function () {
+    clearSearchResults();
+    google.maps.event.trigger(map, 'resize');
+  });
 
   // adding jQery event listeners to DOM Objects
   // $("#pac-panel .toggle-settings").click(function () {
@@ -615,15 +310,66 @@ ViewModel.prototype.initialize = function () {
 };
 
 //
-// called when the search box fires the 'place_changed' event
+// builds lists of the recommended places per type
 //
-function placeChanged() {
+function getRecommendations(types) {
+  if (!types)
+    types = ['establishment']; // each place is an establishment, so that filters all places
+  if (typeof types === 'string')
+    types = [types];
+
+  var ret = [];
+  var recs = Object.getOwnPropertyNames(data.recommendations);
+  for (var i = 0; i < recs.length; i++) {
+    var place_id = recs[i];
+    var place = data.recommendations[place_id];
+
+    if ((new RegExp('\\b' + types.join('\\b|\\b') + '\\b')).test(place.types.join(' '))) {
+      ret.push(place);
+    }
+  }
+  return ret;
+}
+
+function clearSearchResults() {
+  infoWindowClosed();
   clearMarkers();
   model.searchResults.removeAll();
 
   // hide the pagination "more" button before each search
   $("#results-panel").addClass("hidden");
   $("#results-more").addClass("hidden");
+}
+
+//
+// called when a recommendation label is clicked
+//
+function recClicked(e) {
+  clearSearchResults();
+
+  var places = e.data;
+  var j = model.searchResults().length;
+  // Create a marker for each result
+  for (var i = 0; i < places.length; i++) {
+    // not all results get added, so only increase j when successful
+    if (addPlace(places[i], j))
+      j++;
+  }
+
+  // fit map to markers
+  fitToMarkers();
+
+  // show the results panel
+  $("#results-panel").removeClass("hidden");
+  google.maps.event.trigger(map, "resize");
+
+}
+
+//
+// called when the search box fires the 'place_changed' event
+//
+function placeChanged() {
+  clearSearchResults();
 
   var place = autocomplete.getPlace();
   if (place.geometry) {
@@ -632,19 +378,22 @@ function placeChanged() {
   else if (place.name) {
     performSearch(place.name);
   }
+
   // show the results panel
   $("#results-panel").removeClass("hidden");
+  google.maps.event.trigger(map, "resize");
 };
 
+//
+// called to perform the google maps search for a given text
+//
 function performSearch(text) {
 
   // get the searchoptions from the viewmodel and adjust them as needed
   var search = ko.mapping.toJS(settings.searchOptions);
   search.bounds = map.getBounds();
-  search.name = text;
+  search.name = text; // TODO implement full text search with search.keyword instead of search.name (through option)
   delete search.typeOptions;
-
-  // TODO implement full text search with search.keyword (if search setting selected)
 
   places.nearbySearch(search, function (results, status, pagination) {
 
@@ -677,6 +426,9 @@ function performSearch(text) {
   });
 }
 
+//
+// sets a place as search result
+//
 function setPlace(place) {
   // If the place has a geometry, then present it on a map.
   if (place.geometry.viewport)
@@ -684,9 +436,12 @@ function setPlace(place) {
   else
     map.setCenter(place.geometry.location);
 
-  addPlace(place);
+  addPlace(place, 0);
 }
 
+//
+// adds a place as search result
+//
 function addPlace(place, i) {
   if (hasType(place, 'establishment')) {
 
@@ -694,11 +449,14 @@ function addPlace(place, i) {
     koPlace.jsPlace = place; // link back to the original JS object
     koPlace.index = i;
     koPlace.indexDisplay = (i + 1) + '.';
+
     if (!(i >= 0))
       koPlace.indexDisplay = '';
+
     koPlace.first = ko.computed(function () {
       return !(this.index > 0);
     }, koPlace);
+
     koPlace.onClick = function () {
       selectPlace(this);
     }
@@ -716,6 +474,9 @@ function addPlace(place, i) {
   return false;
 }
 
+//
+// selects a given place. i.e. shows the info window and highlights the search result
+//
 function selectPlace(koPlace) {
   if (selectedPlace)
     selectedPlace.selected(false);
@@ -727,11 +488,18 @@ function selectPlace(koPlace) {
 
     infoWindow.setContent(document.getElementById('info-content'));
 
+    $('#review-more, #review-close').click(function () {
+      $("#review-more").toggleClass("hidden");
+      $("#review-details").toggleClass("hidden");
+      google.maps.event.trigger(map, 'resize');
+    });
+
     if (koPlace.marker)
       infoWindow.open(map, koPlace.marker);
   }
   else {
     infoWindow.close();
+    infoWindowClosed();
     //model.selectedPlace(null);
   }
 }
@@ -745,12 +513,15 @@ function extendPlaceDetails(koPlace) {
     // create all necessary observables but don't overwrite them
     koExtend(koPlace, {
       selected: ko.observable(false),
+      name: ko.observable(),
+      markerIcon: ko.observable(),
+      vicinity: ko.observable(),
+      website: ko.observable(),
+      websiteText: ko.observable(),
       formatted_phone_number: ko.observable(),
       rating: ko.observable(),
       url: ko.observable(),
-      website: ko.observable(),
-      websiteText: ko.observable(),
-      markerIcon: ko.observable()
+      review: ko.observable()
     }, false);
 
     koPlace.getStarWidth = ko.computed(function () {
@@ -760,8 +531,9 @@ function extendPlaceDetails(koPlace) {
     }, koPlace);
 
     var place_id = koPlace.place_id();
-    if (data.recommendations[place_id])
-      koPlace.rec = ko.mapping.fromJS(data.recommendations[place_id]);
+    if (data.recommendations[place_id]) {
+      koExtend(koPlace, data.recommendations[place_id], true);
+    }
 
     places.getDetails({
         placeId: place_id
@@ -791,6 +563,9 @@ function extendPlaceDetails(koPlace) {
   }
 }
 
+//
+// extend function which merges two knockout objects
+//
 function koExtend(koBase, koExtension, overwrite) {
 
   if (!koBase || !koExtension)
@@ -831,7 +606,7 @@ function koExtend(koBase, koExtension, overwrite) {
       }
 
       // create new observable if its not existing yet, no recursion is needed here since there can't be subscribers
-      if (!koBase[prop] || koBase[prop].name !== 'observable') {
+      if (!koBase[prop] || koBase[prop].name !== 'observable' || typeof koBase[prop]() === 'undefined') {
 
         // if the property already exists but is not an observable and shouldn't be overwriten, simply wrap the property
         if (koBase[prop] && koBase[prop].name !== 'observable' && !overwrite) {
@@ -872,7 +647,9 @@ function koExtend(koBase, koExtension, overwrite) {
   }
 }
 
+//
 // adds the place to the model and sets the marker
+//
 function setMarker(koPlace) {
 
   if (koPlace) {
@@ -895,19 +672,22 @@ function setMarker(koPlace) {
 var MARKER_PATH_GREEN = 'https://maps.gstatic.com/intl/en_us/mapfiles/marker_green';
 var MARKER_PATH = 'https://maps.gstatic.com/intl/en_us/mapfiles/marker';
 
+//
+// adds a marker to the map for a given place
+//
 function addMarker(koPlace, i) {
 
   // use letter-coded icons
   var markerLetter = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
   var markerIcon = MARKER_PATH + markerLetter + '.png';
 
-  if (koPlace.rec)
+  if (koPlace.review && (koPlace.review.name !== 'observable' || koPlace.review()))
     markerIcon = MARKER_PATH_GREEN + markerLetter + '.png';
 
   // create a marker
   var m = new google.maps.Marker({
     title: koPlace.name(),
-    position: koPlace.jsPlace.geometry.location,
+    position: new google.maps.LatLng(koPlace.jsPlace.geometry.location.G, koPlace.jsPlace.geometry.location.K),
     animation: google.maps.Animation.DROP,
     icon: markerIcon
   });
@@ -921,6 +701,9 @@ function addMarker(koPlace, i) {
   setTimeout(dropMarker(i), i * 50);
 }
 
+//
+// clears all markers
+//
 function clearMarkers() {
   setMarker(null);
   for (var i = 0, len = markers.length; i < len; i++) {
@@ -931,6 +714,9 @@ function clearMarkers() {
   markers = [];
 }
 
+//
+// callback to drop the marker on the map after a timeout
+//
 function dropMarker(i) {
   return function () {
     if (!i)
@@ -939,10 +725,16 @@ function dropMarker(i) {
   };
 }
 
+//
+// called when a marker is clicked
+//
 function markerClicked() {
   selectPlace(this.koPlace);
 }
 
+//
+// helper function to check if a place has a certain type
+//
 function hasType(place, type) {
   for (var i = 0, len = place.types.length; i < len; i++) {
     if (place.types[i] == type)
@@ -950,41 +742,14 @@ function hasType(place, type) {
   }
 }
 
-function geocode(place) {
-  geocoder.geocode({
-    'placeId': place.place_id
-  }, makeGeocodeCallback(place, function (place, results, status) {
-
-    if (status == google.maps.GeocoderStatus.OK && results[0]) {
-      // in case the place is found by the geocoder, push all parameters of the result to the place
-      var result = results[0];
-      delete result.geometry.location; // keep the original location
-      delete result.geometry.location_type; // drop location type
-      delete result.types; // keep the original types
-      delete result.place_id; // should be equal to place.place_id, but just to make sure, no overwrite happens
-
-      $.extend(place, result);
-    }
-
-    if (!place.rating)
-      place.rating = null;
-
-    // add the place to the model anyways
-    var mapping = ko.mapping.fromJS(place);
-    model.searchResults.push(mapping);
-  }));
-}
-
-function makeGeocodeCallback(place, callback) {
-  return function (results, status) {
-    if (callback)
-      callback(place, results, status);
-  };
-}
-
+//
+// fits the map to all markers
+//
 function fitToMarkers() {
   var bounds = new google.maps.LatLngBounds();
-  for (var i = 0, len = markers.length; i < len; i++) {
+  var i = 0,
+    len = markers.length;
+  for (i = 0; i < len; i++) {
     var marker = markers[i];
 
     bounds.extend(marker.getPosition());
@@ -992,26 +757,35 @@ function fitToMarkers() {
     if (koPlace && koPlace.jsPlace.geometry.viewport)
       bounds.extend(koPlace.jsPlace.geometry.viewport);
   }
-
-  map.fitBounds(bounds);
+  if (i > 0)
+    map.fitBounds(bounds);
 
   // don't zoom too close when few markers are present
   if (map.getZoom() > 17)
     map.setZoom(17);
 }
 
-function mapBoundsChanged() {
-  var bounds = map.getBounds();
-
-};
-
+//
+// called, when the map is clicked, closes the info window.
+//
 function mapClicked(e) {
-  //selectPlace(null);
+  infoWindow.close();
+  infoWindowClosed();
 };
 
-function closeInfoWindow() {
+//
+// called, when the info window is closed. little hack to store the content of the info window back in the DOM, otherwise the knockout binding will stop working.
+//
+function infoWindowClosed() {
+
+  if (selectedPlace)
+    selectedPlace.selected(false);
+
   // this was a tricky one. see here why: http://stackoverflow.com/questions/31970927/binding-knockoutjs-to-google-maps-infowindow-content
-  document.getElementById('info-window-container').appendChild(infoWindow.getContent());
+  var content = infoWindow.getContent();
+  if (content)
+    document.getElementById('info-window-container').appendChild(content);
+
 }
 
 module.exports = new ViewModel();

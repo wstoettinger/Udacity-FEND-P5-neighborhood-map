@@ -1,21 +1,20 @@
 html,
 body,
-#map-canvas {
+.content,
+#map-canvas,
+#map-div {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
 }
 
-#map-div {
-  height: 800px;
-}
-
 /* control panels which are overlays on the map */
 #map-div .panel {
+  max-width: 95%;
   margin: 8px 0 0 8px;
   font-family: Roboto;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 300;
   background-color: #fff;
   border: 1px solid transparent;
@@ -39,6 +38,23 @@ body,
 #map-div #results {
   max-height: 400px;
   overflow-y: scroll;
+}
+
+@media only screen and (max-device-width:480px) {
+  #map-div .panel {
+    width: 100%;
+    max-width: 100%;
+    margin: 0px;
+  }
+
+  /* the scrollable results panel */
+  #map-div #results {
+    width: 100%;
+    max-width: 100%;
+    max-height: 150px;
+    overflow-y: scroll;
+  }
+
 }
 
 .row.result:hover {
@@ -77,24 +93,6 @@ hr.full-line {
 
 #map-div #pac-search {
   padding-left: 34px;
-}
-
-/* font awesome icon for the settings toggle */
-#map-div i.arrows {
-  padding-top: 7px;
-  margin-left: 14px;
-  color: rgba(0, 0, 0, .4);
-  position: absolute;
-  display: inline-block;
-  font: normal normal normal 20px/1 FontAwesome;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transform: translate(0, 0);
-}
-
-#map-div i.arrows:before {
-  content: "\f101";
 }
 
 #map-div label {
@@ -154,6 +152,45 @@ hr.full-line {
 .markerIcon,
 .placeIcon {
   height: 24px;
+}
+
+.iw-recommended,
+#review-more {
+  color: #3C9112;
+}
+
+/*
+ * font awesome icon adaptations
+ */
+#map-div i.arrows,
+#map-div i.close {
+  color: rgba(0, 0, 0, .4);
+  display: inline-block;
+  font: normal normal normal 20px/1 FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translate(0, 0);
+}
+
+#map-div i.arrows {
+  position: absolute;
+  padding-top: 7px;
+  margin-left: 14px;
+}
+
+#map-div i.close {
+  padding-top: 1px;
+  position: relative;
+  float: right;
+}
+
+#map-div i.arrows:before {
+  content: "\f101";
+}
+
+#map-div i.close:before {
+  content: "\f00d";
 }
 
 /* 
