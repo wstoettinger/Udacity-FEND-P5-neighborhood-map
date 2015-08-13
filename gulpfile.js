@@ -23,6 +23,13 @@ gulp.task('scripts', function () {
     .pipe(gulp.dest('./web/js/'));
 });
 
+// not used:
+gulp.task('components', function () {
+  return gulp.src('./src/components/*.html')
+    //.pipe(uglify())
+    .pipe(gulp.dest('./web/components/'));
+});
+
 gulp.task('css', function () {
   return gulp.src('./src/**/*.css')
     .pipe(minify())

@@ -80,22 +80,21 @@ hr.full-line {
 }
 
 /* font awesome icon for the settings toggle */
-#map-div i.toggle-settings {
-  font-size: 18px;
-  padding-top: 11px;
+#map-div i.arrows {
+  padding-top: 7px;
   margin-left: 14px;
   color: rgba(0, 0, 0, .4);
   position: absolute;
   display: inline-block;
-  font: normal normal normal 14px/1 FontAwesome;
+  font: normal normal normal 20px/1 FontAwesome;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transform: translate(0, 0);
 }
 
-#map-div i.toggle-settings:before {
-  content: "\f0c9";
+#map-div i.arrows:before {
+  content: "\f101";
 }
 
 #map-div label {
@@ -118,8 +117,7 @@ hr.full-line {
 }
 
 #pac-settings {
-  height: 36px;
-  border-top: 1px solid rgba(0, 0, 0, .1);
+  height: 36px;  /* border-top: 1px solid rgba(0, 0, 0, .1); */
 }
 
 /* legacy CSS */

@@ -7,6 +7,11 @@ window.initialize = function () {
   var ko = require('knockout');
   var model = require('./viewmodel.js');
 
+  /*  ko.components.register('info-window-content', {
+      viewModel: require('../components/info-window-content.js'),
+      template: require('../components/info-window-content.html.js')
+    });*/
+
   ko.applyBindings(model);
   model.initialize();
 }

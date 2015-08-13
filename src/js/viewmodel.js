@@ -62,6 +62,10 @@ function ViewModel() {
   model.searchResults = ko.observableArray(); // ko.mapping.fromJS(data.searchResults);
   model.selectedPlace = ko.observable();
 
+  model.resultsCount = ko.computed(function () {
+    return this.searchResults().length;
+  }, model);
+
   //
   // Saved Locations
   // TODO
@@ -98,32 +102,55 @@ ViewModel.prototype.initialize = function () {
 
   // instantiate an InfoWindow
   infoWindow = new google.maps.InfoWindow();
-  infoWindow.setContent(document.getElementById('info-content'));
 
   // initalize the single marker
   marker = new google.maps.Marker({
     map: map,
     animation: google.maps.Animation.DROP
   });
-
   // add event listeners
   google.maps.event.addListener(autocomplete, 'place_changed', placeChanged);
   google.maps.event.addListener(map, 'bounds_changed', mapBoundsChanged);
   google.maps.event.addListener(map, 'click', mapClicked);
   google.maps.event.addListener(marker, 'click', markerClicked);
+  google.maps.event.addListener(infoWindow, 'closeclick', closeInfoWindow);
+
+  $('#rec-all').click([], recClicked);
+  $('#rec-cafes').click(['cafe'], recClicked);
+  $('#rec-bars').click(['bar'], recClicked);
+  $('#rec-restaurants').click(['restaurant'], recClicked);
+  $('#rec-clubs').click(['night_club'], recClicked);
 
   // adding jQery event listeners to DOM Objects
-  $("#pac-panel .toggle-settings").click(function () {
-    $("#pac-panel #pac-settings").toggleClass("hidden");
-    google.maps.event.trigger(map, 'resize');
-  });
+  // $("#pac-panel .toggle-settings").click(function () {
+  //   $("#pac-panel #pac-settings").toggleClass("hidden");
+  //   google.maps.event.trigger(map, 'resize');
+  // });
 };
+
+function recClicked(e) {
+  var types = e.data;
+
+  var recs = Object.getOwnPropertyNames(data.recommendations);
+  for (var i = 0; i < recs.length; i++) {
+    var rec = data.recommendations[recs[i]];
+
+    if ((new RegExp('\\b' + types.join('\\b|\\b') + '\\b')).test(rec.types.join('\\b|\\b'))) {
+      alert('match');
+    }
+  }
+}
 
 //
 // called when the search box fires the 'place_changed' event
 //
 function placeChanged() {
   clearMarkers();
+  model.searchResults.removeAll();
+
+  // hide the pagination "more" button before each search
+  $("#results-panel").addClass("hidden");
+  $("#results-more").addClass("hidden");
 
   var place = autocomplete.getPlace();
   if (place.geometry) {
@@ -132,11 +159,11 @@ function placeChanged() {
   else if (place.name) {
     performSearch(place.name);
   }
+  // show the results panel
+  $("#results-panel").removeClass("hidden");
 };
 
 function performSearch(text) {
-  // clear results
-  clearMarkers();
 
   // get the searchoptions from the viewmodel and adjust them as needed
   var search = ko.mapping.toJS(settings.searchOptions);
@@ -146,29 +173,34 @@ function performSearch(text) {
 
   // TODO implement full text search with search.keyword (if search setting selected)
 
-  places.nearbySearch(search, function (results, status) {
+  places.nearbySearch(search, function (results, status, pagination) {
 
     if (status != google.maps.places.PlacesServiceStatus.OK)
       return;
 
     var len = results.length;
-    var places = [];
-
-    if (len == 1)
-      setPlace(place); // set the single marker
-    else { // Create a marker for each result
-      model.searchResults.removeAll();
-
-      for (var i = 0, j = 0; i < len; i++) {
-        var place = results[i];
-
-        // only add establishments to the search results
-        if (addPlace(place, j))
-          j++;
-      }
-
-      fitToMarkers();
+    var j = model.searchResults().length;
+    // Create a marker for each result
+    for (var i = 0; i < len; i++) {
+      // not all results get added, so only increase j when successful
+      if (addPlace(results[i], j))
+        j++;
     }
+
+    // pagination to load more results
+    if (pagination.hasNextPage) {
+      var moreButton = $("#results-more");
+      moreButton.removeClass("hidden");
+
+      moreButton.click(function () {
+        moreButton.addClass("hidden");
+        pagination.nextPage();
+      });
+    }
+
+    // fit map to markers
+    fitToMarkers();
+
   });
 }
 
@@ -179,16 +211,18 @@ function setPlace(place) {
   else
     map.setCenter(place.geometry.location);
 
-  model.searchResults.removeAll();
   addPlace(place);
 }
 
 function addPlace(place, i) {
-  if (hasType(place, "establishment")) {
+  if (hasType(place, 'establishment')) {
 
     var koPlace = ko.mapping.fromJS(place);
     koPlace.jsPlace = place; // link back to the original JS object
     koPlace.index = i;
+    koPlace.indexDisplay = (i + 1) + '.';
+    if (!(i >= 0))
+      koPlace.indexDisplay = '';
     koPlace.first = ko.computed(function () {
       return !(this.index > 0);
     }, koPlace);
@@ -217,6 +251,9 @@ function selectPlace(koPlace) {
     koPlace.selected(true);
     selectedPlace = koPlace;
     model.selectedPlace(koPlace);
+
+    infoWindow.setContent(document.getElementById('info-content'));
+
     if (koPlace.marker)
       infoWindow.open(map, koPlace.marker);
   }
@@ -230,52 +267,135 @@ function selectPlace(koPlace) {
 // this needs to be done after the place is added to the model, because the api call happens asynchronously
 function extendPlaceDetails(koPlace) {
 
-  if (!koPlace.selected)
-    koPlace.selected = ko.observable(false);
-  if (!koPlace.formatted_phone_number)
-    koPlace.formatted_phone_number = ko.observable();
-  if (!koPlace.rating)
-    koPlace.rating = ko.observable();
+  if (!koPlace.extended || !koPlace.extended()) {
 
-  if (!koPlace.url)
-    koPlace.url = ko.observable();
+    // create all necessary observables but don't overwrite them
+    koExtend(koPlace, {
+      selected: ko.observable(false),
+      formatted_phone_number: ko.observable(),
+      rating: ko.observable(),
+      url: ko.observable(),
+      website: ko.observable(),
+      websiteText: ko.observable(),
+      markerIcon: ko.observable()
+    }, false);
 
-  if (!koPlace.website)
-    koPlace.website = ko.observable();
-  if (!koPlace.websiteText)
-    koPlace.websiteText = ko.observable();
-  if (!koPlace.markerIcon)
-    koPlace.markerIcon = ko.observable();
-
-  if (!koPlace.getStarWidth)
     koPlace.getStarWidth = ko.computed(function () {
-      if (this.rating() > 0)
+      if (this.rating && this.rating() > 0)
         return (65 * this.rating() / 5) + 'px';
       return '57.2px';
     }, koPlace);
 
-  if (!koPlace.extended || !koPlace.extended()) {
+    var place_id = koPlace.place_id();
+    if (data.recommendations[place_id])
+      koPlace.rec = ko.mapping.fromJS(data.recommendations[place_id]);
 
     places.getDetails({
-        placeId: koPlace.place_id()
+        placeId: place_id
       },
       function (placeDetails, status) {
 
         if (status == google.maps.places.PlacesServiceStatus.OK) {
 
-          var details = ko.mapping.fromJS(placeDetails);
+          var koDetails = ko.mapping.fromJS(placeDetails);
+          koExtend(koPlace, koDetails, true);
           $.extend(koPlace.jsPlace, placeDetails);
-          $.extend(koPlace, details); // TODO: check if this is working and check which details are fetched and which props get overwritten.
           koPlace.extended = ko.observable(true);
 
           // build a short url for display of the website.
-          var matches = koPlace.website().replace(/^https?:\/\//i, '').replace(/^www\./i, '').match(/.+?\//);
-          if (matches && matches[0]) {
-            koPlace.websiteText(matches[0].replace(/\/$/, ''));
+          var website = koPlace.website();
+          if (website) {
+            var matches = website.replace(/^https?:\/\//i, '').replace(/^www\./i, '').match(/.+?\//);
+            if (matches && matches[0]) {
+              koPlace.websiteText(matches[0].replace(/\/$/, ''));
+            }
           }
 
+          // this is necessary because the $.extend function doesn't get noticed by knockout.
+          koPlace.website.valueHasMutated();
         }
       });
+  }
+}
+
+function koExtend(koBase, koExtension, overwrite) {
+
+  if (!koBase || !koExtension)
+    return;
+
+  // unwrap extension if necessary
+  if (koExtension.name == 'observable')
+    koExtension = koExtension();
+
+  // if the extension value is of a simple type, simply set the value
+  if (typeof koExtension !== 'object') {
+    if (overwrite) {
+      if (koBase.name == 'observable')
+        koBase(koExtension);
+      else
+        koBase = koExtension;
+    }
+  }
+  else {
+    // iterate through properties
+    var props = Object.getOwnPropertyNames(koExtension);
+    for (var i = 0; i < props.length; i++) {
+      var prop = props[i];
+      var exValue = koExtension[prop];
+      var isObservable = false;
+
+      // unwrap value
+      if (exValue.name === 'observable') {
+        exValue = exValue();
+        isObservable = true;
+      }
+
+      // clone functions if they don't exist yet:
+      if (typeof koExtension[prop] === 'function' && !isObservable) {
+        if (!koBase[prop])
+          koBase[prop] = koExtension[prop].bind(koBase);
+        continue;
+      }
+
+      // create new observable if its not existing yet, no recursion is needed here since there can't be subscribers
+      if (!koBase[prop] || koBase[prop].name !== 'observable') {
+
+        // if the property already exists but is not an observable and shouldn't be overwriten, simply wrap the property
+        if (koBase[prop] && koBase[prop].name !== 'observable' && !overwrite) {
+          koBase[prop] = ko.observable(koBase[prop]);
+          continue;
+        }
+        // create the observable:
+        if (Array.isArray(exValue))
+          koBase[prop] = ko.observableArray();
+        else
+          koBase[prop] = ko.observable();
+
+        if (exValue) {
+          // set the value:
+          if (isObservable)
+            koBase[prop](exValue);
+          else
+            koBase[prop](ko.mapping.fromJS(exValue));
+        }
+      }
+      // if the observable exists already:
+      else {
+        if (overwrite) {
+          // arrays simply get overwritten
+          if (Array.isArray(exValue)) {
+            // if the base property is not an observable array, a new one has to be crated
+            if (!Array.isArray(koBase[prop]()))
+              koBase[prop] = ko.observableArray(exValue);
+            else
+              koBase[prop](exValue);
+          }
+          // recursively extend the property:
+          else
+            koExtend(koBase[prop], exValue, overwrite);
+        }
+      }
+    }
   }
 }
 
@@ -299,14 +419,17 @@ function setMarker(koPlace) {
   }
 }
 
-//var MARKER_PATH = 'https://maps.gstatic.com/intl/en_us/mapfiles/marker_green';
+var MARKER_PATH_GREEN = 'https://maps.gstatic.com/intl/en_us/mapfiles/marker_green';
 var MARKER_PATH = 'https://maps.gstatic.com/intl/en_us/mapfiles/marker';
 
 function addMarker(koPlace, i) {
 
   // use letter-coded icons
-  var markerLetter = String.fromCharCode('A'.charCodeAt(0) + i);
+  var markerLetter = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
   var markerIcon = MARKER_PATH + markerLetter + '.png';
+
+  if (koPlace.rec)
+    markerIcon = MARKER_PATH_GREEN + markerLetter + '.png';
 
   // create a marker
   var m = new google.maps.Marker({
@@ -322,7 +445,7 @@ function addMarker(koPlace, i) {
   koPlace.markerIcon(markerIcon);
 
   google.maps.event.addListener(m, 'click', markerClicked);
-  setTimeout(dropMarker(i), i * 100);
+  setTimeout(dropMarker(i), i * 50);
 }
 
 function clearMarkers() {
@@ -412,5 +535,10 @@ function mapBoundsChanged() {
 function mapClicked(e) {
   //selectPlace(null);
 };
+
+function closeInfoWindow() {
+  // this was a tricky one. see here why: http://stackoverflow.com/questions/31970927/binding-knockoutjs-to-google-maps-infowindow-content
+  document.getElementById('info-window-container').appendChild(infoWindow.getContent());
+}
 
 module.exports = new ViewModel();
