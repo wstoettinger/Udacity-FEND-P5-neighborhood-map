@@ -315,13 +315,14 @@ function ViewModel() {
 
   // load additional recommendations from cookies
 
-  var storedPlaceIDs = Cookies.getJSON("placeIDs");;
-  for (var i = 0; i < storedPlaceIDs.length; i++) {
-    var placeID = storedPlaceIDs[i];
-    var place = Cookies.getJSON(placeID);
-    if (place)
-      data.recommendations[place.place_id] = place;
-  }
+  var storedPlaceIDs = Cookies.getJSON("placeIDs");
+  if (storedPlaceIDs)
+    for (var i = 0; i < storedPlaceIDs.length; i++) {
+      var placeID = storedPlaceIDs[i];
+      var place = Cookies.getJSON(placeID);
+      if (place)
+        data.recommendations[place.place_id] = place;
+    }
 
   //
   // Recommended Places
