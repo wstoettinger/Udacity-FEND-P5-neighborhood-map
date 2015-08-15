@@ -14,7 +14,7 @@ window.initialize = function () {
 
   ko.applyBindings(model);
   model.initialize();
-}
+};
 
 window.loadScript = function () {
   // Asynchronously load the google maps script:

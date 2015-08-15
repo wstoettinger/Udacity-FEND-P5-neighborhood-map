@@ -68,7 +68,7 @@ function ViewModel() {
 
   // load additional recommendations from cookies
 
-  var storedPlaceIDs = Cookies.getJSON("placeIDs");
+  var storedPlaceIDs = Cookies.getJSON('placeIDs');
   if (storedPlaceIDs)
     for (var i = 0; i < storedPlaceIDs.length; i++) {
       var placeID = storedPlaceIDs[i];
@@ -85,17 +85,6 @@ function ViewModel() {
   recommended.bars = getRecommendations('bar');
   recommended.restaurants = getRecommendations('restaurant');
   recommended.clubs = getRecommendations('night_club');
-};
-
-function getCookie(cname) {
-  var name = cname + "=";
-  var ca = document.cookie.split(';');
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') c = c.substring(1);
-    if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
-  }
-  return "";
 }
 
 //
@@ -118,7 +107,7 @@ ViewModel.prototype.initialize = function () {
 
   //Associate the styled map with the MapTypeId and set it to display.
   map.mapTypes.set('map_style', new google.maps.StyledMapType(settings.map.mapStyle, {
-    name: "Styled Map"
+    name: 'Styled Map'
   }));
   map.setMapTypeId('map_style');
 
@@ -221,7 +210,7 @@ ViewModel.prototype.initialize = function () {
 
   // keyboard shortcut to load the next page of search results
   Mousetrap.bind(['space'], function (e) {
-    $("#results-more").addClass("hidden");
+    $('#results-more').addClass('hidden');
     if (pagination && pagination.hasNextPage)
       pagination.nextPage();
   });
@@ -234,8 +223,8 @@ ViewModel.prototype.initialize = function () {
   });
 
   // adding jQery event listeners to DOM Objects
-  // $("#pac-panel .toggle-settings").click(function () {
-  //   $("#pac-panel #pac-settings").toggleClass("hidden");
+  // $('#pac-panel .toggle-settings').click(function () {
+  //   $('#pac-panel #pac-settings').toggleClass('hidden');
   //   google.maps.event.trigger(map, 'resize');
   // });
 };
@@ -270,7 +259,7 @@ function getRecommendations(types) {
 //
 function recommend(rec) {
 
-  rec.types.push["__user_recommendation__"];
+  rec.types.push('__user_recommendation__');
   data.recommendations[rec.place_id] = rec;
 
   recommended.all.push(rec);
@@ -290,15 +279,15 @@ function recommend(rec) {
 
 function clearSearchResults() {
 
-  $('#pac-search').val("");
+  $('#pac-search').val('');
 
   selectPlace(null);
   clearMarkers();
   model.searchResults.removeAll();
 
-  // hide the pagination "more" button before each search
-  $("#results-panel").addClass("hidden");
-  $("#results-more").addClass("hidden");
+  // hide the pagination 'more' button before each search
+  $('#results-panel').addClass('hidden');
+  $('#results-more').addClass('hidden');
 
   pagination = null;
 }
@@ -323,8 +312,8 @@ function recClicked(e) {
   fitToMarkers();
 
   // show the results panel
-  $("#results-panel").removeClass("hidden");
-  google.maps.event.trigger(map, "resize");
+  $('#results-panel').removeClass('hidden');
+  google.maps.event.trigger(map, 'resize');
 
 }
 
@@ -337,8 +326,8 @@ function placeChanged() {
   $('#pac-search').val(val);
 
   // these listeners need to be here, because the DOM Elements only get inserted by knockout, when a search has been performed
-  $("#results-more").click(function () {
-    $("#results-more").addClass("hidden");
+  $('#results-more').click(function () {
+    $('#results-more').addClass('hidden');
     if (pagination && pagination.hasNextPage)
       pagination.nextPage();
   });
@@ -352,12 +341,12 @@ function placeChanged() {
   }
 
   // show the results panel
-  $("#results-panel").removeClass("hidden");
-  google.maps.event.trigger(map, "resize");
+  $('#results-panel').removeClass('hidden');
+  google.maps.event.trigger(map, 'resize');
 
   // take the focus away from the input box
   document.getElementById('pac-search').blur();
-};
+}
 
 //
 // called to perform the google maps search for a given text
@@ -391,7 +380,7 @@ function performSearch(text) {
 
     // pagination to load more results
     if (pagination.hasNextPage)
-      $("#results-more").removeClass("hidden");
+      $('#results-more').removeClass('hidden');
 
     // fit map to markers
     fitToMarkers();
@@ -432,7 +421,7 @@ function addPlace(place, i, x) {
 
     koPlace.onClick = function () {
       selectPlace(this);
-    }
+    };
 
     preparePlace(koPlace);
     model.searchResults.push(koPlace);
@@ -479,36 +468,36 @@ function selectPlace(koPlace) {
 
     // these listeners need to be here, because the DOM Elements only get inserted by knockout, when a place is selected
     $('#close-more').click(function () {
-      $('.place-details').addClass("hidden");
+      $('.place-details').addClass('hidden');
       google.maps.event.trigger(map, 'resize');
     });
 
     $('#review-more').click(function () {
-      $('.place-details').addClass("hidden");
+      $('.place-details').addClass('hidden');
 
-      $("#place-details-content").removeClass("hidden");
-      $('#close-more').removeClass("hidden");
-      $("#review-details").removeClass("hidden");
+      $('#place-details-content').removeClass('hidden');
+      $('#close-more').removeClass('hidden');
+      $('#review-details').removeClass('hidden');
       google.maps.event.trigger(map, 'resize');
     });
 
     $('#photos-more').click(function () {
       loadPPhotos(model.selectedPlace());
-      $('.place-details').addClass("hidden");
+      $('.place-details').addClass('hidden');
 
-      $("#place-details-content").removeClass("hidden");
-      $('#close-more').removeClass("hidden");
-      $("#photos-details").removeClass("hidden");
+      $('#place-details-content').removeClass('hidden');
+      $('#close-more').removeClass('hidden');
+      $('#photos-details').removeClass('hidden');
       google.maps.event.trigger(map, 'resize');
     });
 
     $('#yelp-more').click(function () {
       loadYelp(model.selectedPlace());
-      $('.place-details').addClass("hidden");
+      $('.place-details').addClass('hidden');
 
-      $("#place-details-content").removeClass("hidden");
-      $('#close-more').removeClass("hidden");
-      $("#yelp-details").removeClass("hidden");
+      $('#place-details-content').removeClass('hidden');
+      $('#close-more').removeClass('hidden');
+      $('#yelp-details').removeClass('hidden');
       google.maps.event.trigger(map, 'resize');
     });
 
@@ -582,7 +571,7 @@ function preparePlace(koPlace) {
 
     koPlace.markerIcon(markerIcon);
     koPlace.marker.setIcon(markerIcon);
-  }
+  };
 
   koPlace.getDataToSave = function () {
     return {
@@ -597,7 +586,7 @@ function preparePlace(koPlace) {
       types: this.types(),
       review: ko.mapping.toJS(this.review)
     };
-  }
+  };
 
   updateBindings(koPlace);
 }
@@ -874,7 +863,7 @@ function fitToMarkers() {
 //
 function mapClicked(e) {
   selectPlace(null);
-};
+}
 
 //
 // called, when the info window is closed. little hack to store the content of the info window back in the DOM, otherwise the knockout binding will stop working.
@@ -900,19 +889,19 @@ function loadPPhotos(koPlace, callback) {
   // prevent double clicks:
   if (koPlace && !koPlace.pPhotos().requested()) {
     koPlace.pPhotos().requested(true);
-    koPlace.pPhotos().message("loading Panoramio data");
+    koPlace.pPhotos().message('loading Panoramio data');
 
     var position = ko.mapping.toJS(koPlace.geometry().location);
 
-    var ll = "&minx=" + (position.lng() - 0.0002) + "&miny=" + (position.lat() - 0.0002) + "&maxx=" + (position.lng() + 0.0002) + "&maxy=" + (position.lat() + 0.0002);
+    var ll = '&minx=' + (position.lng() - 0.0002) + '&miny=' + (position.lat() - 0.0002) + '&maxx=' + (position.lng() + 0.0002) + '&maxy=' + (position.lat() + 0.0002);
     var url = PHOTOS_URL + ll;
 
     try {
       // place the request
       $.ajax({
         url: url,
-        dataType: "jsonp",
-        // in case of success add the images into the placeholder 
+        dataType: 'jsonp',
+        // in case of success add the images into the placeholder
         success: function (data) {
           var photos = koPlace.pPhotos();
 
@@ -925,7 +914,7 @@ function loadPPhotos(koPlace, callback) {
           koPlace.pPhotos.valueHasMutated();
 
           if (photos.data().length == 0)
-            photos.message("no pictures found");
+            photos.message('no pictures found');
 
           if (callback)
             callback();
@@ -933,7 +922,7 @@ function loadPPhotos(koPlace, callback) {
         // ajax error handling
         error: function () {
           koPlace.pPhotos().requested(false);
-          koPlace.pPhotos().message("ups, something went wrong! please retry");
+          koPlace.pPhotos().message('ups, something went wrong! please retry');
 
           if (callback)
             callback();
@@ -943,30 +932,30 @@ function loadPPhotos(koPlace, callback) {
     }
     catch (e) {
       koPlace.pPhotos().requested(false);
-      koPlace.pPhotos().message("ups, something went wrong! please retry");
+      koPlace.pPhotos().message('ups, something went wrong! please retry');
     }
   }
 }
 
-var YWSID = "qw6jC11x1OciJ92VVnRwEg";
+var YWSID = 'qw6jC11x1OciJ92VVnRwEg';
 
 function loadYelp(koPlace, callback) {
 
   // prevent double clicks:
   if (koPlace && !koPlace.yelp().requested()) {
     koPlace.yelp().requested(true);
-    koPlace.yelp().message("loading yelp data");
+    koPlace.yelp().message('loading yelp data');
 
     var mapCenter = map.getCenter();
-    var URL = "http://api.yelp.com/" +
-      "business_review_search?" +
-      "callback=" + "handleYelpResults" +
-      "&term=" + koPlace.name() +
-      "&num_biz_requested=10" +
-      "&lat=" + mapCenter.lat() +
-      "&long=" + mapCenter.lng() +
-      "&radius=" + 5 +
-      "&ywsid=" + YWSID;
+    var URL = 'http://api.yelp.com/' +
+      'business_review_search?' +
+      'callback=' + 'handleYelpResults' +
+      '&term=' + koPlace.name() +
+      '&num_biz_requested=10' +
+      '&lat=' + mapCenter.lat() +
+      '&long=' + mapCenter.lng() +
+      '&radius=' + 5 +
+      '&ywsid=' + YWSID;
     var yelpRequestURL = encodeURI(URL);
 
     /* do the api request */
@@ -988,9 +977,9 @@ window.handleYelpResults = function (data) {
     var koPlace = model.selectedPlace();
     var yelp = koPlace.yelp();
 
-    if (data.message.text == "OK") {
+    if (data.message.text == 'OK') {
       if (data.businesses.length == 0) {
-        yelp.message("No yelp business found");
+        yelp.message('No yelp business found');
         return;
       }
       yelp.data(ko.mapping.fromJS(data.businesses[0]));
@@ -998,7 +987,7 @@ window.handleYelpResults = function (data) {
       yelp.loaded(true);
     }
     else {
-      yelp.message("Error: " + data.message.text);
+      yelp.message('Error: ' + data.message.text);
       yelp.requested(false);
     }
   }

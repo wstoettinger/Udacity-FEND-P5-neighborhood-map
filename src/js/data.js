@@ -26,7 +26,7 @@ var data = {
         atmosphere: 4,
         friendlyness: 4,
         speed: 4,
-        visited: true,
+        visited: true
       }
     },
     "ChIJT9vaE5AIbUcRMfatVrSl_vQ": {
@@ -51,7 +51,7 @@ var data = {
         atmosphere: 4,
         friendlyness: 4,
         speed: 4,
-        visited: false,
+        visited: false
       }
     },
     "ChIJRQOc6JEHbUcRa1qkdSORVUA": {
@@ -71,7 +71,7 @@ var data = {
         "description": "Very fancy restaurant in Vienna.",
         "recommended": true,
         "tags": ["dinner", "drinks"],
-        "price": "€€€",
+        "price": "€€€"
       }
     },
     "ChIJ219HP5IHbUcRbUPt1aeiwnw": {
