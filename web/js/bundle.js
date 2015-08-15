@@ -314,17 +314,13 @@ function ViewModel() {
   }, model);
 
   // load additional recommendations from cookies
-  var storedPlaceIDsCookie = getCookie("placeIDs");
-  if (storedPlaceIDsCookie) {
-    var storedPlaceIDs = JSON.parse(storedPlaceIDsCookie);
-    for (var i = 0; i < storedPlaceIDs.length; i++) {
-      var placeID = storedPlaceIDs[i];
-      var storedPlaceCookie = getCookie(placeID);
-      if (storedPlaceCookie) {
-        var place = JSON.parse(storedPlaceCookie);
-        data.recommendations[place.place_id] = place;
-      }
-    }
+
+  var storedPlaceIDs = Cookies.getJSON("placeIDs");;
+  for (var i = 0; i < storedPlaceIDs.length; i++) {
+    var placeID = storedPlaceIDs[i];
+    var place = Cookies.getJSON(placeID);
+    if (place)
+      data.recommendations[place.place_id] = place;
   }
 
   //
