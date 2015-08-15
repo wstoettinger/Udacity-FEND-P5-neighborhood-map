@@ -34,6 +34,17 @@ body,
   transition: background-color 200ms cubic-bezier(0.52, 0, 0.48, 1);
 }
 
+#info-content .place-details div {
+  margin-bottom: 1px;
+}
+
+#info-content div.row,
+#info-content td {
+  padding: 7px;
+  margin: 0;
+  max-width: inherit;
+}
+
 /* the scrollable results panel */
 #map-div #results {
   max-height: 400px;
@@ -75,6 +86,16 @@ hr {
 
 hr.full-line {
   margin: 0px;
+}
+
+#photos-details img {
+  vertical-align: bottom;
+}
+
+#photos-details .gm-ph-label {
+  bottom: -1px;
+  left: 6px;
+  font-weight: 400;
 }
 
 #map-div input {

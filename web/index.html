@@ -22,9 +22,9 @@
         </span></span><i class="arrows"></i>
       </div>
       <div class ="row">
-        <div>Recommended Places:</div>
+        <div>Filter recommended places:</div>
         <div id="pac-recommendations">
-          <a id="rec-all">all</a> | <a id="rec-cafes">cafes</a> | <a id="rec-bars">bars</a> | <a id="rec-restaurants">restaurants</a> | <a id="rec-clubs">clubs</a>
+          <a id="rec-all" title="press alt+a to show all places">all</a> | <a id="rec-cafes" title="press alt+c to show all cafes">cafes</a> | <a id="rec-bars" title="press alt+b to show all bars">bars</a> | <a id="rec-restaurants" title="press alt+r to show all restaurants">restaurants</a> | <a id="rec-clubs" title="press alt+l to show all clubs">clubs</a>
         </div>
       </div>
       <hr role="presentation" class="horizontal-line full-line" />
@@ -51,6 +51,9 @@
               <span data-bind="if:markerIcon"><img class="markerIcon" alt="marker icon" data-bind="attr: {src:markerIcon}" /></span>
               <!-- ko if: hasReview -->
               <span class="iw-recommended">recommended</span>
+              <!-- /ko -->
+              <!-- ko ifnot: hasReview -->
+              <a class="mark-recommend" data-bind="click: markRecommended">recommend</a>
               <!-- /ko -->
               <!-- ko if: false -->
               <span data-bind="if:icon"><img class="placeIcon" alt="place icon" data-bind="attr: {src:icon}" /></span>
@@ -109,16 +112,17 @@
           <div id="place-details">
             <ul class="nav nav-tabs">
               <!-- ko if:hasReview -->
-              <li role="presentation" id="review-more"><a href="#">Recommendation</a></li>
+              <li role="presentation" id="review-more"><a href="#">My Recommendation</a></li>
               <!-- /ko -->
               <li role="presentation" id="photos-more" ><a href="#">Photos</a></li>
-              <li role="presentation" id="wiki-more"  ><a href="#">Wikipedia</a></li>
-              <li role="presentation" id="close-more" class="hidden"><a href="#">close</a></li>
+              <li role="presentation" id="yelp-more"  ><a href="#">Yelp</a></li>
+              <li role="presentation" id="close-more" class="place-details hidden"><a href="#">close</a></li>
             </ul>
-            <div id="place-details-content" class="hidden">
-              <div id="review-details" class="hidden" data-bind="if:hasReview">
-                <span data-bind="with:review">
-                  <div class="gm-title">Recommendation:</div>
+            <div id="place-details-content" class="place-details row hidden">
+              <!-- review details panel -->
+              <div id="review-details" class="place-details hidden" data-bind="if:hasReview">
+                <!-- ko with:review -->
+                <div>
                   <div data-bind="if:description"><span data-bind="text:description"></span></div>
                   <div class="gm-title">Rating:</div>
                   <div data-bind="if:price">price category: <span data-bind="text:price"></span></div>
@@ -127,20 +131,51 @@
                   <div data-bind="if:friendlyness">friendlyness: <span data-bind="text:friendlyness"></span></div>
                   <div data-bind="if:speed">speed: <span data-bind="text:speed"></span></div>
                   <div data-bind="if:tags">tags: <span data-bind="foreach:tags"><span class="gm-tag" data-bind="text:$data"></span> </span></div>
-                </span>
+                </div>
+                <!-- /ko -->
               </div>
-              <div id="photos-details" class="gm-photos hidden">
-                <span>
-                  <span class="gm-wsv" jsdisplay="!photoImg" jsvalues=".onclick:svClickFn" jstcache="6">
-                    <img jsvalues=".src:svImg" width="204" height="50" jstcache="11"><label class="gm-sv-label" jstcache="0">Street View</label>
-                  </span>
-                  <span class="gm-sv" jsdisplay="photoImg" jsvalues=".onclick:svClickFn" jstcache="7">
-                    <img jsvalues=".src:svImg" width="100" height="50" jstcache="11"><label class="gm-sv-label" jstcache="0">Street View</label>
-                  </span>
-                  <span class="gm-ph" jsdisplay="photoImg" jstcache="8"><a jsvalues=".href:i.result.url;" target="_blank" jstcache="12">
-                    <img jsvalues=".src:photoImg" width="100" height="50" jstcache="14"><label class="gm-ph-label" jstcache="0">Fotos</label></a>
-                  </span>
+              <!-- photos details panel -->
+              <div id="photos-details" class="place-details hidden" data-bind="if:hasPhotos">
+                <div class="gm-title">Google Photos:</div>
+                <span data-bind="foreach:photos">
+                  <span class="gm-ph"><a target="_blank" data-bind="attr: {href:photo_url}">
+                    <img width="100" height="50" data-bind="attr: {src:photo_file_url}">
+                    <label class="gm-ph-label" >(c)<span data-bind="text:owner_name"></span></label>
+                  </a></span>
                 </span>
+                <hr role="presentation" class="horizontal-line full-line" />
+                <div class="gm-title">Panoramio Photos:</div>
+                <!-- ko with:pPhotos -->
+                <div data-bind="if:message"><span data-bind="text:message"></span></div>
+                <div data-bind="foreach:data">
+                  <span class="gm-ph"><a target="_blank" data-bind="attr: {href:photo_url}">
+                    <img width="100" height="50" data-bind="attr: {src:photo_file_url}">
+                    <label class="gm-ph-label" >(c)<span data-bind="text:owner_name"></span></label>
+                  </a></span>
+                </span>
+                </div>
+                <!-- /ko -->
+              </div>
+              <!-- Yelp details panel -->
+              <div id="yelp-details" class="place-details hidden" data-bind="if:hasYelp">
+                <!-- ko with:yelp -->
+                <div data-bind="if:message"><span data-bind="text:message"></span></div>
+                <div data-bind="with:data">
+                  <div class="gm-title"><a data-bind="attr: {href:url}" target="_blank"><span data-bind="text:name"></span> on Yelp</a></div>
+                  <table>
+                    <tr><td >
+                      <span class="gm-ph"><a target="_blank" data-bind="attr: {href:url}">
+                        <img width="100" height="50" data-bind="attr: {src:photo_url}">
+                        <label class="gm-ph-label" >(c) Yelp</label>
+                      </a></span>
+                    </td>
+                    <td>
+                      <div><a target="_blank" data-bind="attr: {href:url}"><span data-bind="text:review_count"></span>&nbsp;reviews&nbsp;<img data-bind="attr:{src:rating_img_url}" /></a></div>
+                      <div data-bind="if:categories">Categories: <span data-bind="foreach:categories"><a data-bind="attr: {href:search_url}, text: name"></a> </span></div>
+                    </td></tr>
+                  </table>
+                </div>
+                <!-- /ko -->
               </div>
             </div>
           </div>
